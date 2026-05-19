@@ -1,0 +1,37 @@
+{
+  "summary": "Backend (PHP/MySQL) tested via pytest on localhost:3000: 10/10 tests pass — full CRUD on sections, contenus, realisations, link/unlink competences, upload/serve/delete preuves, and cascade delete all work correctly. Frontend testid markers, edit-mode toggle and panneau d'édition open correctly. HOWEVER a CRITICAL ingress mismatch breaks all /api/* calls through the public external URL — the Kubernetes ingress forwards /api/* to port 8001 (default FastAPI, which has no portfolio endpoints), while the PHP API actually serves on port 3000. As a result, the live UI shows 'Erreur : API /api/sections/1 -> 404' when saving, /api/competences returns 404, and no edit feature works for the end user.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "/api/* (public URL)", "issue": "External ingress routes /api/* to port 8001 (uvicorn default app) instead of the PHP server on port 3000. All API calls return 404 via REACT_APP_BACKEND_URL while they work on localhost:3000. The supervised 'backend' uvicorn process should be stopped/replaced, and the ingress / nginx must forward /api/* to 0.0.0.0:3000 (or all traffic, since PHP handles both UI and API).", "priority": "CRITICAL"}
+    ],
+    "minor": [
+      {"endpoint": "/uploads/<missing-file>", "issue": "When a preuve file is deleted, router.php falls through to index.php and returns the homepage HTML with HTTP 200 instead of 404. Add an explicit 404 in router.php for /uploads/* not found."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Save section / load competences / any edit action", "issue": "All fetch('/api/...') calls from editeur.js return 404 because they hit port 8001 via ingress. Visible as red toast 'Erreur : API /api/sections/1 -> 404'.", "affected_selectors": ["[data-testid=\"save-section-btn\"]", "[data-testid=\"competences-list\"]", "[data-testid=\"add-realisation\"]"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "URGENT: Fix the ingress / supervisor configuration so /api/* on the public URL is served by the PHP server on port 3000 (e.g., stop the uvicorn backend program and reconfigure ingress to forward everything — including /api — to port 3000; or add an nginx reverse-proxy on 8001 that proxies to 127.0.0.1:3000).",
+    "Optional: Patch /app/public/router.php so missing /uploads/* returns HTTP 404 instead of falling through to index.php.",
+    "Confirm in browser (public URL) that after the routing fix, 'Mode édition' + save on hero title persists the change without the red error toast."
+  ],
+  "critical_code_review_comments": [
+    "Architecture mismatch with platform: project assumes the PHP server on port 3000 handles both UI and API, but the Emergent ingress conventionally splits /api -> 8001. Either repurpose port 8001 as a thin proxy to 3000 or document this requirement loudly in README.",
+    "/app/modeles/PreuveModele.php: DELETE uses @unlink with no logging on failure; on permission errors the user gets ok:true but the file lingers. Consider returning a warning.",
+    "/app/public/router.php: /uploads/* should return 404 when the file is absent; currently it leaks the homepage HTML with 200 — confusing for clients."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100% (localhost) / 0% (public URL)", "frontend": "UI structure 100%, integration 0% via public URL"},
+  "test_credentials": "N/A — no auth in this project (DB user portfolio/portfolio_pwd_2026 on portfolio_btssio)",
+  "seed_data_creation": "Schema seeded from /app/sql/schema.sql (6 sections + 6 compétences C1.1..C1.6). Tests create/delete TEST_-prefixed realisations and clean up after themselves.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend pytest suite at /app/backend/tests/backend_test.py is comprehensive (10 tests, all pass on localhost:3000). To reproduce the ingress 404, simply: curl https://sio-careerpad.preview.emergentagent.com/api/competences  (returns 404) vs curl http://localhost:3000/api/competences (returns 200). After main agent fixes routing, re-run pytest with REACT_APP_BACKEND_URL pointing to the public URL — every test should still pass.",
+  "rca of the issue": "Root cause: this PHP/MySQL project serves the entire app (UI + REST API) from a single PHP built-in server bound to 0.0.0.0:3000 (started by `yarn start` in package.json). The Emergent Kubernetes ingress, however, splits traffic by prefix: '/api/*' -> internal port 8001, everything else -> port 3000. Port 8001 is still running the default FastAPI scaffold (uvicorn server:app) which has no portfolio endpoints, so every /api/* request returns 404 once it transits the public ingress. Reproduction: open https://sio-careerpad.preview.emergentagent.com/, click 'Mode édition' (works), click hero title (panel opens), edit and click Enregistrer -> red toast 'Erreur : API /api/sections/1 -> 404'. Mitigation options: (a) replace the supervised 'backend' uvicorn with an nginx/caddy reverse-proxy on 8001 that proxies to 127.0.0.1:3000; (b) reconfigure ingress so /api/* is also routed to port 3000; (c) wrap the PHP API behind a thin FastAPI proxy on 8001."
+}
