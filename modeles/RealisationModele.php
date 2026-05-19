@@ -41,9 +41,8 @@ class RealisationModele {
     }
 
     public function creer(array $d): int {
-        $cat = in_array(($d['categorie'] ?? 'formation'),
-                        ['formation','pro_annee1','pro_annee2'], true)
-                ? $d['categorie'] : 'formation';
+        $catIn = $d['categorie'] ?? 'formation';
+        $cat = in_array($catIn, ['formation','pro_annee1','pro_annee2'], true) ? $catIn : 'formation';
         $sql = "INSERT INTO realisations
                 (titre, contexte, description, contribution_personnelle, travail_equipe,
                  technologies, lien, date_realisation, categorie, periode_debut, periode_fin)
@@ -66,9 +65,8 @@ class RealisationModele {
     }
 
     public function modifier(int $id, array $d): bool {
-        $cat = in_array(($d['categorie'] ?? 'formation'),
-                        ['formation','pro_annee1','pro_annee2'], true)
-                ? $d['categorie'] : 'formation';
+        $catIn = $d['categorie'] ?? 'formation';
+        $cat = in_array($catIn, ['formation','pro_annee1','pro_annee2'], true) ? $catIn : 'formation';
         $sql = "UPDATE realisations SET
                     titre = :t, contexte = :c, description = :d,
                     contribution_personnelle = :cp, travail_equipe = :te,

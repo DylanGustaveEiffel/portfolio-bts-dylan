@@ -34,16 +34,32 @@ réalisations, compétences Bloc 1, preuves uploadables).
 - 6 sections squelette + 6 compétences Bloc 1 préchargées
 
 ## Implémenté (2026-02)
+### Itération 1 — Base MVC
 - MVC complet (modèles/vues/contrôleurs)
-- API JSON (lecture, CRUD, upload preuves)
+- API JSON CRUD
 - Éditeur visuel "Mode édition" avec panneau latéral
-- Accessibilité (skip link, aria-label, focus visible, contrastes)
+- Accessibilité (skip link, aria-label, focus visible, contrastes WCAG AA)
 - Responsive (CSS variables, media queries)
-- README + oral_e5.md (plan d'oral détaillé)
+
+### Itération 2 — Proxy FastAPI→PHP
+- FastAPI (port 8001) sert de reverse-proxy vers PHP (port 3000)
+- Fix: /api/* accessible via URL publique Kubernetes
+
+### Itération 3 — Conformité officielle E5
+- **Profil candidat** (NOM, prénom, n° candidat, SESSION, option SISR/SLAM, établissement)
+- **Catégorisation des réalisations** : Formation / Pro 1ère année / Pro 2ème année
+- **Période** (début/fin) sur chaque réalisation, affichée en format JJ/MM/AA
+- **Contribution personnelle** (critère officiel d'évaluation)
+- **Travail en équipe projet** (case à cocher)
+- **Tableau de synthèse** officiel : matrice compétences × réalisations (imprimable)
+- **Attestations de stage** (1ère + 2ème année, upload PDF/PNG/JPG)
+- **Sous-compétences** détaillées (du référentiel officiel)
+- **Indicateurs de performance** officiels (38 indicateurs au total)
+- `oral_e5.md` enrichi avec indicateurs officiels + critère "contribution personnelle"
 
 ## Backlog (P1/P2)
 - P1: Auth admin optionnelle (toggle .env)
-- P1: Export PDF du portfolio
+- P1: Export PDF complet du portfolio (impression actuelle = tableau seul)
 - P2: Drag & drop pour réordonner les réalisations
 - P2: Thèmes (clair/sombre)
-- P2: Editeur WYSIWYG (markdown -> HTML)
+- P2: Justification par sous-compétence (granularité fine)
