@@ -26,6 +26,8 @@ require_once ROOT . '/modeles/ContenuModele.php';
 require_once ROOT . '/modeles/RealisationModele.php';
 require_once ROOT . '/modeles/CompetenceModele.php';
 require_once ROOT . '/modeles/PreuveModele.php';
+require_once ROOT . '/modeles/ProfilModele.php';
+require_once ROOT . '/modeles/AttestationModele.php';
 
 class ApiControleur {
 
@@ -74,6 +76,24 @@ class ApiControleur {
             $this->supprimerPreuve((int)$m[1]); return;
         }
 
+        // ---- Profil candidat -------------------------------------------------
+        if ($uri === '/api/profil' && $method === 'GET')  { $this->json((new ProfilModele())->get()); return; }
+        if ($uri === '/api/profil' && $method === 'POST') {
+            $ok = (new ProfilModele())->modifier($this->body());
+            $this->json(['ok' => $ok]); return;
+        }
+
+        // ---- Attestations de stage ------------------------------------------
+        if ($uri === '/api/attestations' && $method === 'GET') {
+            $this->json((new AttestationModele())->toutes()); return;
+        }
+        if (preg_match('#^/api/attestations/(annee1|annee2)$#', $uri, $m) && $method === 'POST') {
+            $this->uploadAttestation($m[1]); return;
+        }
+        if (preg_match('#^/api/attestations/(\d+)$#', $uri, $m) && $method === 'DELETE') {
+            $this->json(['ok' => (new AttestationModele())->supprimer((int)$m[1])]); return;
+        }
+
         $this->json(['erreur' => 'Route inconnue', 'uri' => $uri, 'methode' => $method], 404);
     }
 
@@ -92,6 +112,8 @@ class ApiControleur {
             'contenus'      => $contenusParSection,
             'realisations'  => $realisations,
             'competences'   => (new CompetenceModele())->toutes(),
+            'profil'        => (new ProfilModele())->get(),
+            'attestations'  => (new AttestationModele())->toutes(),
         ]);
     }
 
@@ -188,5 +210,40 @@ class ApiControleur {
     private function supprimerPreuve(int $id): void {
         $ok = (new PreuveModele())->supprimer($id);
         $this->json(['ok' => $ok]);
+    }
+
+    /**
+     * Upload d'une attestation de stage (PDF de préférence).
+     * Stockée sous /uploads/attestations/.
+     */
+    private function uploadAttestation(string $annee): void {
+        if (empty($_FILES['fichier']) || $_FILES['fichier']['error'] !== UPLOAD_ERR_OK) {
+            $this->json(['erreur' => 'Fichier manquant'], 400); return;
+        }
+        $f = $_FILES['fichier'];
+        if ($f['size'] > 10 * 1024 * 1024) {
+            $this->json(['erreur' => 'Fichier trop volumineux (10 Mo max)'], 400); return;
+        }
+        $mime    = mime_content_type($f['tmp_name']) ?: $f['type'];
+        $allowed = ['application/pdf', 'image/png', 'image/jpeg'];
+        if (!in_array($mime, $allowed, true)) {
+            $this->json(['erreur' => 'Format non autorisé (PDF/PNG/JPG uniquement)'], 400); return;
+        }
+        $dir = ROOT . '/uploads/attestations';
+        if (!is_dir($dir)) mkdir($dir, 0775, true);
+        $ext  = strtolower(pathinfo($f['name'], PATHINFO_EXTENSION));
+        $safe = $annee . '_' . bin2hex(random_bytes(6)) . '.' . preg_replace('/[^a-z0-9]/', '', $ext);
+        if (!move_uploaded_file($f['tmp_name'], $dir . '/' . $safe)) {
+            $this->json(['erreur' => 'Échec enregistrement'], 500); return;
+        }
+        $id = (new AttestationModele())->ajouter($annee, [
+            'titre'         => $_POST['titre']         ?? $f['name'],
+            'organisme'     => $_POST['organisme']     ?? '',
+            'periode_debut' => $_POST['periode_debut'] ?? null,
+            'periode_fin'   => $_POST['periode_fin']   ?? null,
+            'fichier'       => 'uploads/attestations/' . $safe,
+            'type_mime'     => $mime,
+        ]);
+        $this->json(['ok' => true, 'id' => $id]);
     }
 }

@@ -361,3 +361,126 @@ body.mode-edition .bloc__actions-edition[hidden] { display: block; }
 
 /* Importation des polices (CDN gratuit, sans tracking lourd) */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+/* ===========================================================================
+   AJOUTS pour la conformité E5 : profil, tableau de synthèse, attestations,
+   compétences détaillées (sous-compétences + indicateurs).
+   =========================================================================== */
+
+/* Lecteurs d'écran uniquement (utile pour <caption class="sr-only">) */
+.sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* -- Profil candidat ------------------------------------------------------- */
+.bloc--profil { padding-block: 3rem; }
+.profil-grille {
+    display: grid; gap: 1rem; margin: 0;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    background: var(--c-fond-alt); border: 1px solid var(--c-bord);
+    border-radius: var(--rayon); padding: 1.5rem;
+    box-shadow: var(--ombre);
+}
+.profil-grille > div { display: flex; flex-direction: column; gap: .25rem; }
+.profil-grille dt {
+    font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--c-encre-doux); font-weight: 600;
+}
+.profil-grille dd { margin: 0; font-family: var(--police-titre); font-size: 1.1rem; }
+
+/* -- Catégories de réalisations ------------------------------------------- */
+.categorie-titre {
+    margin: 2.5rem 0 1rem; font-family: var(--police-titre); font-size: 1.15rem;
+    color: var(--c-accent-fonce); padding-bottom: .35rem;
+    border-bottom: 2px solid var(--c-bord);
+}
+.categorie-titre:first-of-type { margin-top: 1rem; }
+
+.carte__contrib {
+    margin: 0; padding: .65rem .85rem; background: #f0f7ff;
+    border-left: 3px solid var(--c-accent); border-radius: 4px;
+    color: var(--c-encre); font-size: .92rem;
+}
+.puce--equipe { background: #ecfdf5; color: var(--c-vert); border-color: #d1fae5; }
+
+/* -- Tableau de synthèse -------------------------------------------------- */
+.table-scroll { overflow-x: auto; margin-bottom: 1.5rem; }
+.tableau-synthese {
+    width: 100%; border-collapse: collapse; background: var(--c-fond-alt);
+    border-radius: var(--rayon); overflow: hidden; box-shadow: var(--ombre);
+    font-size: .9rem;
+}
+.tableau-synthese th, .tableau-synthese td {
+    border: 1px solid var(--c-bord); padding: .65rem .75rem; text-align: left;
+    vertical-align: middle;
+}
+.tableau-synthese thead th {
+    background: var(--c-encre); color: #fff; font-family: var(--police-titre);
+    text-align: center; white-space: nowrap;
+}
+.tableau-synthese thead th:first-child { text-align: left; }
+.tableau-synthese tbody td.mob {
+    text-align: center; background: #dcfce7; color: var(--c-vert);
+    font-weight: 700; font-size: 1.1rem;
+}
+.tableau-synthese tbody td:not(:first-child):not(.mob) { text-align: center; color: #cbd5e1; }
+.tableau-synthese tr.ligne-categorie th {
+    background: #eff6ff; color: var(--c-accent-fonce);
+    font-family: var(--police-titre); font-size: 1rem; text-align: left;
+    text-transform: uppercase; letter-spacing: .05em;
+}
+
+.legende {
+    background: var(--c-fond-alt); border: 1px solid var(--c-bord);
+    padding: 1rem; border-radius: var(--rayon); font-size: .85rem;
+    display: grid; gap: .35rem;
+}
+.legende-item { color: var(--c-encre-doux); }
+.legende-item strong { color: var(--c-accent-fonce); }
+
+/* -- Attestations --------------------------------------------------------- */
+.attestations-grille {
+    display: grid; gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.attestation {
+    background: var(--c-fond-alt); border: 1px solid var(--c-bord);
+    border-radius: var(--rayon); padding: 1.5rem; box-shadow: var(--ombre);
+}
+.attestation h3 {
+    margin: 0 0 .75rem; font-family: var(--police-titre); font-size: 1.1rem;
+    color: var(--c-accent-fonce);
+}
+.attestation .muted { color: var(--c-encre-doux); font-size: .9rem; margin: .25rem 0; }
+body.mode-edition .edit-only { display: inline-flex !important; }
+
+/* -- Compétences détaillées (sous-compétences + indicateurs) -------------- */
+.liste-competences { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+.competence-bloc {
+    background: var(--c-fond-alt); border: 1px solid var(--c-bord);
+    border-radius: var(--rayon); padding: 1.25rem;
+}
+.competence-bloc__entete {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;
+}
+.competence-bloc summary {
+    cursor: pointer; color: var(--c-accent); font-weight: 600;
+    padding: .35rem 0;
+}
+.competence-bloc details + details { margin-top: .35rem; }
+.sous-liste {
+    margin: .5rem 0 0; padding-left: 1.5rem;
+    color: var(--c-encre-doux); font-size: .92rem;
+}
+.sous-liste li { margin-bottom: .35rem; }
+.sous-liste--indic li { color: var(--c-encre); }
+
+/* -- Mode impression du tableau de synthèse -------------------------------- */
+@media print {
+    .entete, .pied, .panneau, .overlay, .bloc__actions-edition, .toast,
+    .lien-evitement, .hero__cta { display: none !important; }
+    .bloc { padding: 1rem 0; }
+    body { background: #fff; }
+}
+

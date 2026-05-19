@@ -1,0 +1,47 @@
+{
+  "summary": "Iteration 3 (E5 conformity) testing via public REACT_APP_BACKEND_URL. Backend: 8/8 new pytest tests pass (profil GET/POST, attestations GET/upload/serve/delete, competences with sous_competences+indicateurs, realisations with categorie/periode/contribution/travail_equipe). Frontend: all new sections + testids present, synthese table OK with C1.1..C1.6 columns, edit-mode toggle reveals all edit-only buttons, profile edit-save-display flow works end-to-end, attestation annee1 upload works (file served via /uploads/attestations/). However ONE CRITICAL backend bug breaks add-realisation: POST /api/realisations without explicit `categorie` returns 500 'Column categorie cannot be null'. Two MEDIUM UX gaps: edit-profil panel only exposes 3 of 6 profile fields; attestation upload panel only exposes the file input (no titre/organisme/periode).",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "POST /api/realisations", "issue": "Returns HTTP 500 'SQLSTATE[23000] Column categorie cannot be null' when payload omits `categorie`. Root cause in /app/modeles/RealisationModele.php (creer() and modifier()): ternary `in_array(($d['categorie'] ?? 'formation'), [...], true) ? $d['categorie'] : 'formation'`. When the key is absent, the in_array check passes (thanks to ??), but the truthy branch reads $d['categorie'] which is undefined => NULL is bound. Fix: replace `? $d['categorie'] :` by `? ($d['categorie'] ?? 'formation') :` in BOTH creer() (line ~46) and modifier() (line ~71). Frontend `add-realisation` button calls this without categorie => add-realisation flow is COMPLETELY BROKEN on the public URL.", "priority": "CRITICAL"}
+    ],
+    "minor": [
+      {"endpoint": "GET /api/data", "issue": "`sections` count is now 9 (added profil/synthese/attestations rows) but the older test_get_data_structure in backend_test.py still asserts 6. Pre-existing regression test needs updating to 9 or to filter by code."},
+      {"endpoint": "/uploads/<deleted-file>", "issue": "Same as iter1: deleted files return HTTP 200 with index.php HTML because /app/public/router.php falls through. Should return 404."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "EditProfilPanel", "issue": "Panel only renders 3 inputs (edit-profil-nom, edit-profil-prenom, edit-profil-option). Missing inputs for numero_candidat, session, etablissement -- yet the profile card displays these slots and the backend persists them. User cannot edit these via UI.", "selector": "[data-testid=\"edit-panel\"]", "priority": "MEDIUM"},
+      {"component": "AttestationUploadPanel (annee1/annee2)", "issue": "Panel only has the file input (att-file-annee1) + save button. No UI inputs for titre / organisme / periode_debut / periode_fin, although the backend accepts them via $_POST. After upload, the card displays '—' for the missing fields.", "selector": "[data-testid=\"edit-panel\"]", "priority": "MEDIUM"},
+      {"component": "editeur.js initial load", "issue": "Console warning 'Impossible de charger les compétences — TypeError: Failed to fetch' fires on first page load (race between DOMContentLoaded and proxy availability). The page still renders correctly thanks to the server-side render; recommend retrying the fetch or wrapping in a small timeout.", "selector": "console", "priority": "LOW"}
+    ],
+    "integration_issues": [
+      {"flow": "Add realisation (toggle edit -> click 'add-realisation')", "issue": "Triggers POST /api/realisations -> 500. Page error toast 'API /api/realisations -> 500' surfaces. The card is never appended to data-testid='realisations-formation'. Caused by the backend bug above.", "affected_selectors": ["[data-testid=\"add-realisation\"]", "[data-testid=\"realisations-formation\"]"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_e5_iteration3.py",
+    "/app/test_reports/pytest/iter3_results.xml"
+  ],
+  "action_items": [
+    "FIX (1 line, critical): in /app/modeles/RealisationModele.php replace `? $d['categorie'] : 'formation'` by `? ($d['categorie'] ?? 'formation') : 'formation'` in both creer() and modifier(). This unblocks the 'Ajouter une réalisation' flow on the public URL.",
+    "Add the 3 missing inputs in the profile edit panel (numero_candidat, session, etablissement) in /app/vues/accueil.php + /app/js/editeur.js so the user can fill the full E5 candidate identification.",
+    "Add titre / organisme / periode_debut / periode_fin inputs in the attestation upload panel for both annee1 and annee2 (backend already supports them).",
+    "Update the legacy assertion in /app/backend/tests/backend_test.py::test_get_data_structure (sections now == 9, not 6).",
+    "Optional: harden initial fetch in /app/js/editeur.js (retry once on TypeError: Failed to fetch) and return 404 in /app/public/router.php for missing /uploads/*."
+  ],
+  "critical_code_review_comments": [
+    "RealisationModele.php creer()/modifier() ternary is a classic null-coalescing trap. Same pattern should be applied defensively to other whitelisted enums.",
+    "ApiControleur::uploadAttestation reads $_POST['titre']/'organisme'/'periode_*' but the frontend never sends them — UI is incomplete relative to the backend contract.",
+    "editeur.js charges les compétences via fetch() au DOMContentLoaded, mais ne réessaie pas en cas d'échec réseau — confusing first-paint UX."
+  ],
+  "updated_files": ["/app/backend/tests/test_e5_iteration3.py"],
+  "success_rate": {"backend": "100% on new iter3 endpoints (8/8). Critical creer() bug only triggers when categorie is omitted (e.g. from add-realisation UI).", "frontend": "Sections/testids 100%, profil edit/save 100%, attestation upload 100%, add-realisation 0% (blocked by backend bug)."},
+  "test_credentials": "N/A - no auth (DB: portfolio/portfolio_pwd_2026)",
+  "seed_data_creation": "Tests create TEST_-prefixed transient data (realisations, attestation file) and clean up after themselves. Profile is reset to blanks at end of UI test.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "After main agent fixes RealisationModele.php categorie default, re-run: REACT_APP_BACKEND_URL=https://sio-careerpad.preview.emergentagent.com pytest backend/tests/test_e5_iteration3.py -v (should stay 8/8) and also verify add-realisation Playwright flow: toggle edit -> click [data-testid=add-realisation] -> a card appears in [data-testid=realisations-formation]. Then click edit-realisation-{id}, change categorie to pro_annee1, fill periode_debut/periode_fin/contribution, save, and check the card moves to [data-testid=realisations-pro_annee1] and a row appears in [data-testid=tableau-synthese]. Watch out: edit-profil panel exposes only 3 fields (use edit-profil-nom/prenom/option testids, not profil-*-input).",
+  "rca of the issue": "Critical bug: PHP ternary in RealisationModele.php::creer():\n    $cat = in_array(($d['categorie'] ?? 'formation'), ['formation','pro_annee1','pro_annee2'], true) ? $d['categorie'] : 'formation';\nWhen request body has no `categorie` key, `($d['categorie'] ?? 'formation')` becomes 'formation' so in_array() returns true, but the truthy branch then reads `$d['categorie']` directly → undefined index → PDO binds NULL → MySQL rejects with 1048 (NOT NULL constraint on `categorie`). Reproduce: `curl -X POST $URL/api/realisations -H 'Content-Type: application/json' -d '{\"titre\":\"x\"}'` → 500. Mitigation: change truthy branch to `($d['categorie'] ?? 'formation')`. Same pattern exists in modifier() — patch both."
+}

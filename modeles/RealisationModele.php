@@ -19,7 +19,7 @@ class RealisationModele {
 
     public function toutes(): array {
         $stmt = $this->db->query(
-            "SELECT * FROM realisations ORDER BY ordre ASC, date_realisation DESC, id DESC"
+            "SELECT * FROM realisations ORDER BY ordre ASC, periode_debut DESC, id DESC"
         );
         $reals = $stmt->fetchAll();
         // On enrichit chaque réalisation avec ses compétences et preuves
@@ -41,33 +41,53 @@ class RealisationModele {
     }
 
     public function creer(array $d): int {
-        $sql = "INSERT INTO realisations (titre, contexte, description, technologies, lien, date_realisation)
-                VALUES (:t, :c, :d, :te, :l, :dr)";
+        $cat = in_array(($d['categorie'] ?? 'formation'),
+                        ['formation','pro_annee1','pro_annee2'], true)
+                ? $d['categorie'] : 'formation';
+        $sql = "INSERT INTO realisations
+                (titre, contexte, description, contribution_personnelle, travail_equipe,
+                 technologies, lien, date_realisation, categorie, periode_debut, periode_fin)
+                VALUES (:t, :c, :d, :cp, :te, :tec, :l, :dr, :cat, :pd, :pf)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             ':t'  => $d['titre'] ?? 'Nouvelle réalisation',
             ':c'  => $d['contexte'] ?? '',
             ':d'  => $d['description'] ?? '',
-            ':te' => $d['technologies'] ?? '',
+            ':cp' => $d['contribution_personnelle'] ?? '',
+            ':te' => !empty($d['travail_equipe']) ? 1 : 0,
+            ':tec'=> $d['technologies'] ?? '',
             ':l'  => $d['lien'] ?? '',
             ':dr' => !empty($d['date_realisation']) ? $d['date_realisation'] : null,
+            ':cat'=> $cat,
+            ':pd' => !empty($d['periode_debut']) ? $d['periode_debut'] : null,
+            ':pf' => !empty($d['periode_fin'])   ? $d['periode_fin']   : null,
         ]);
         return (int)$this->db->lastInsertId();
     }
 
     public function modifier(int $id, array $d): bool {
-        $sql = "UPDATE realisations
-                SET titre = :t, contexte = :c, description = :d,
-                    technologies = :te, lien = :l, date_realisation = :dr
+        $cat = in_array(($d['categorie'] ?? 'formation'),
+                        ['formation','pro_annee1','pro_annee2'], true)
+                ? $d['categorie'] : 'formation';
+        $sql = "UPDATE realisations SET
+                    titre = :t, contexte = :c, description = :d,
+                    contribution_personnelle = :cp, travail_equipe = :te,
+                    technologies = :tec, lien = :l, date_realisation = :dr,
+                    categorie = :cat, periode_debut = :pd, periode_fin = :pf
                 WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             ':t'  => $d['titre'] ?? '',
             ':c'  => $d['contexte'] ?? '',
             ':d'  => $d['description'] ?? '',
-            ':te' => $d['technologies'] ?? '',
+            ':cp' => $d['contribution_personnelle'] ?? '',
+            ':te' => !empty($d['travail_equipe']) ? 1 : 0,
+            ':tec'=> $d['technologies'] ?? '',
             ':l'  => $d['lien'] ?? '',
             ':dr' => !empty($d['date_realisation']) ? $d['date_realisation'] : null,
+            ':cat'=> $cat,
+            ':pd' => !empty($d['periode_debut']) ? $d['periode_debut'] : null,
+            ':pf' => !empty($d['periode_fin'])   ? $d['periode_fin']   : null,
             ':id' => $id,
         ]);
     }

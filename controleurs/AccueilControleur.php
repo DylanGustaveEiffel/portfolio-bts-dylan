@@ -12,6 +12,8 @@ require_once ROOT . '/modeles/SectionModele.php';
 require_once ROOT . '/modeles/ContenuModele.php';
 require_once ROOT . '/modeles/RealisationModele.php';
 require_once ROOT . '/modeles/CompetenceModele.php';
+require_once ROOT . '/modeles/ProfilModele.php';
+require_once ROOT . '/modeles/AttestationModele.php';
 
 class AccueilControleur {
     public function index(): void {
@@ -20,6 +22,8 @@ class AccueilControleur {
         $contenuMod   = new ContenuModele();
         $realisations = (new RealisationModele())->toutes();
         $competences  = (new CompetenceModele())->toutes();
+        $profil       = (new ProfilModele())->get();
+        $attestations = (new AttestationModele())->toutes();
 
         // 2) On prépare une map [code_section => contenus] pour la vue
         $contenusParSection = [];

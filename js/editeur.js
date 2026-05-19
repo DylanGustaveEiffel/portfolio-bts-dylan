@@ -79,6 +79,9 @@ function basculerModeEdition() {
     document.querySelectorAll('.bloc__actions-edition').forEach(el => {
         el.hidden = !App.modeEdition;
     });
+    document.querySelectorAll('.edit-only').forEach(el => {
+        el.hidden = !App.modeEdition;
+    });
     toast(App.modeEdition ? 'Mode édition activé' : 'Mode lecture');
 }
 
@@ -175,12 +178,22 @@ async function editerRealisation(realId) {
     // Champs principaux
     const F = {
         titre:        h('input', { type: 'text', id: 'r_titre', value: real.titre || '', 'data-testid': 'edit-real-titre' }),
+        categorie:    h('select', { id: 'r_cat', 'data-testid': 'edit-real-categorie' },
+            h('option', { value: 'formation',  ...(real.categorie === 'formation'  ? { selected: 'selected' } : {}) }, 'En cours de formation'),
+            h('option', { value: 'pro_annee1', ...(real.categorie === 'pro_annee1' ? { selected: 'selected' } : {}) }, 'Milieu pro · 1ère année'),
+            h('option', { value: 'pro_annee2', ...(real.categorie === 'pro_annee2' ? { selected: 'selected' } : {}) }, 'Milieu pro · 2ème année'),
+        ),
+        periodeDebut: h('input', { type: 'date', id: 'r_pd', value: real.periode_debut || '' }),
+        periodeFin:   h('input', { type: 'date', id: 'r_pf', value: real.periode_fin || '' }),
         contexte:     h('textarea', { id: 'r_ctx', rows: 2 }, real.contexte || ''),
-        description:  h('textarea', { id: 'r_desc', rows: 5 }, real.description || ''),
+        description:  h('textarea', { id: 'r_desc', rows: 4 }, real.description || ''),
+        contribution: h('textarea', { id: 'r_contrib', rows: 3, 'data-testid': 'edit-real-contribution' }, real.contribution_personnelle || ''),
+        travailEquipe: h('input', { type: 'checkbox', id: 'r_eq', ...(Number(real.travail_equipe) ? { checked: 'checked' } : {}) }),
         technologies: h('input', { type: 'text', id: 'r_tec', value: real.technologies || '' }),
         lien:         h('input', { type: 'url',  id: 'r_lien', value: real.lien || '' }),
-        date:         h('input', { type: 'date', id: 'r_date', value: real.date_realisation || '' }),
     };
+    // Forcer la valeur du select (workaround attribut "selected" parfois ignoré)
+    F.categorie.value = real.categorie || 'formation';
 
     // Bloc compétences
     const compsListe = h('div', { class: 'competences-liste', id: 'r_comps' });
@@ -240,11 +253,19 @@ async function editerRealisation(realId) {
 
     ouvrirPanneau('Modifier la réalisation', [
         h('label', { for: 'r_titre' }, 'Titre'), F.titre,
+        h('label', { for: 'r_cat' }, 'Catégorie (officiel E5)'), F.categorie,
+        h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:.5rem;' },
+            h('div', {}, h('label', { for: 'r_pd' }, 'Période — début'), F.periodeDebut),
+            h('div', {}, h('label', { for: 'r_pf' }, 'Période — fin'),   F.periodeFin),
+        ),
         h('label', { for: 'r_ctx' }, 'Contexte'), F.contexte,
-        h('label', { for: 'r_desc' }, 'Description'), F.description,
-        h('label', { for: 'r_tec' }, 'Technologies'), F.technologies,
+        h('label', { for: 'r_desc' }, 'Description de la réalisation'), F.description,
+        h('label', { for: 'r_contrib' }, 'Ma contribution personnelle (critère officiel)'),
+        F.contribution,
+        h('label', { for: 'r_eq', style: 'display:flex;gap:.5rem;align-items:center;' },
+            F.travailEquipe, ' Réalisation en équipe projet'),
+        h('label', { for: 'r_tec' }, 'Technologies / outils'), F.technologies,
         h('label', { for: 'r_lien' }, 'Lien (optionnel)'), F.lien,
-        h('label', { for: 'r_date' }, 'Date de réalisation'), F.date,
 
         h('h3', { style: 'margin:1.5rem 0 .5rem;font-family:var(--police-titre);' }, 'Compétences mobilisées (Bloc 1)'),
         compsListe,
@@ -333,6 +354,98 @@ async function ajouterRealisation() {
     }, 350);
 }
 
+// --- 6b) PROFIL CANDIDAT ---------------------------------------------------
+async function editerProfil() {
+    const profil = await api('/api/profil');
+    const F = {
+        nom:    h('input', { type: 'text', id: 'p_nom',    value: profil.nom    || '', 'data-testid': 'edit-profil-nom' }),
+        prenom: h('input', { type: 'text', id: 'p_prenom', value: profil.prenom || '', 'data-testid': 'edit-profil-prenom' }),
+        numero: h('input', { type: 'text', id: 'p_num',    value: profil.numero_candidat || '' }),
+        session:h('input', { type: 'text', id: 'p_ses',    value: profil.session || '', placeholder: 'ex: 2026' }),
+        option: h('select', { id: 'p_opt', 'data-testid': 'edit-profil-option' },
+            h('option', { value: '' }, '— Choisir —'),
+            h('option', { value: 'SISR' }, 'SISR'),
+            h('option', { value: 'SLAM' }, 'SLAM'),
+        ),
+        etab:   h('input', { type: 'text', id: 'p_etab', value: profil.etablissement || '' }),
+    };
+    F.option.value = profil.option_sio || '';
+
+    ouvrirPanneau('Identification du candidat (E5)', [
+        h('label', { for: 'p_nom' }, 'NOM'), F.nom,
+        h('label', { for: 'p_prenom' }, 'Prénom'), F.prenom,
+        h('label', { for: 'p_num' }, 'N° candidat'), F.numero,
+        h('label', { for: 'p_ses' }, 'SESSION'), F.session,
+        h('label', { for: 'p_opt' }, 'Option BTS SIO'), F.option,
+        h('label', { for: 'p_etab' }, 'Établissement'), F.etab,
+        h('div', { class: 'actions' },
+            h('button', {
+                class: 'btn btn--primaire', type: 'button', 'data-testid': 'save-profil-btn',
+                onclick: async () => {
+                    try {
+                        await api('/api/profil', { method: 'POST', body: {
+                            nom: F.nom.value, prenom: F.prenom.value,
+                            numero_candidat: F.numero.value, session: F.session.value,
+                            option_sio: F.option.value, etablissement: F.etab.value,
+                        }});
+                        toast('Profil enregistré', 'succes');
+                        setTimeout(() => location.reload(), 400);
+                    } catch (e) { toast('Erreur : ' + e.message, 'erreur'); }
+                }
+            }, 'Enregistrer'),
+            h('button', { class: 'btn btn--secondaire', type: 'button', onclick: fermerPanneau }, 'Annuler'),
+        )
+    ]);
+}
+
+// --- 6c) ATTESTATIONS DE STAGE ---------------------------------------------
+async function uploaderAttestation(annee) {
+    const titre     = h('input', { type: 'text', id: 'a_t', placeholder: 'Stage de découverte / d\'application…' });
+    const organisme = h('input', { type: 'text', id: 'a_o', placeholder: 'Nom de l\'entreprise' });
+    const pd        = h('input', { type: 'date', id: 'a_pd' });
+    const pf        = h('input', { type: 'date', id: 'a_pf' });
+    const fichier   = h('input', { type: 'file', id: 'a_f', accept: '.pdf,.png,.jpg,.jpeg', 'data-testid': `att-file-${annee}` });
+
+    ouvrirPanneau('Téléverser une attestation', [
+        h('p', { style: 'color:var(--c-encre-doux);font-size:.9rem;' },
+            annee === 'annee1' ? 'Attestation de stage — 1ère année' : 'Attestation de stage — 2ème année'),
+        h('label', { for: 'a_t' }, 'Titre'), titre,
+        h('label', { for: 'a_o' }, 'Organisme / entreprise'), organisme,
+        h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:.5rem;' },
+            h('div', {}, h('label', { for: 'a_pd' }, 'Début'), pd),
+            h('div', {}, h('label', { for: 'a_pf' }, 'Fin'), pf),
+        ),
+        h('label', { for: 'a_f' }, 'Fichier (PDF/PNG/JPG, 10 Mo max)'), fichier,
+        h('div', { class: 'actions' },
+            h('button', {
+                class: 'btn btn--primaire', type: 'button', 'data-testid': `save-att-${annee}`,
+                onclick: async () => {
+                    if (!fichier.files[0]) { toast('Sélectionnez un fichier', 'erreur'); return; }
+                    const fd = new FormData();
+                    fd.append('fichier', fichier.files[0]);
+                    fd.append('titre', titre.value);
+                    fd.append('organisme', organisme.value);
+                    fd.append('periode_debut', pd.value);
+                    fd.append('periode_fin', pf.value);
+                    try {
+                        await api(`/api/attestations/${annee}`, { method: 'POST', body: fd });
+                        toast('Attestation enregistrée', 'succes');
+                        setTimeout(() => location.reload(), 400);
+                    } catch (e) { toast('Erreur : ' + e.message, 'erreur'); }
+                }
+            }, 'Téléverser'),
+            h('button', { class: 'btn btn--secondaire', type: 'button', onclick: fermerPanneau }, 'Annuler'),
+        )
+    ]);
+}
+
+async function supprimerAttestation(id) {
+    if (!confirm('Supprimer cette attestation ?')) return;
+    await api(`/api/attestations/${id}`, { method: 'DELETE' });
+    toast('Supprimée');
+    setTimeout(() => location.reload(), 400);
+}
+
 // --- 7) DÉMARRAGE ----------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
     // Bouton mode édition
@@ -345,6 +458,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Délégation : clics sur les éléments éditables
     document.addEventListener('click', (e) => {
+        // Actions sur les attestations (visibles en mode édition uniquement)
+        const act = e.target.closest('[data-action]');
+        if (act && App.modeEdition) {
+            const action = act.dataset.action;
+            if (action === 'upload-attestation') {
+                e.preventDefault();
+                uploaderAttestation(act.dataset.annee);
+                return;
+            }
+            if (action === 'delete-attestation') {
+                e.preventDefault();
+                supprimerAttestation(Number(act.dataset.id));
+                return;
+            }
+        }
+
         if (!App.modeEdition) return;
         const cible = e.target.closest('[data-edit]');
         if (!cible) return;
@@ -357,6 +486,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             editerContenu(sectionId, cible.dataset.cle, cible);
         } else if (type === 'realisation') {
             editerRealisation(cible.dataset.realisationId);
+        } else if (type === 'profil') {
+            editerProfil();
         }
     });
 
