@@ -12,13 +12,13 @@
     "hero": {
       "titre": "Dylan GARNIER",
       "sous_titre": "Étudiant en BTS SIO — option SLAM",
-      "texte_principal": "Bienvenue sur mon portfolio. Vous trouverez ici l’ensemble de mes réalisations professionnelles, mes compétences, mes stages et mes preuves pour l’épreuve E5."
+      "texte_principal": "Bienvenue sur mon portfolio. Vous trouverez ici mes réalisations professionnelles, mes compétences, mes stages et toutes les preuves nécessaires pour l’épreuve E5."
     },
 
     "apropos": {
       "titre": "À propos",
       "sous_titre": "Mon parcours de professionnalisation",
-      "texte_principal": "Depuis le début de ma formation en BTS SIO option SLAM, j’ai développé des compétences solides en développement applicatif, gestion de données, conception UML, travail en mode projet et mise à disposition de services informatiques. Ce portfolio regroupe l’ensemble de mes réalisations, projets, stages et compétences mobilisées."
+      "texte_principal": "Étudiant en BTS SIO option SLAM, je me suis formé au développement d’applications, à la gestion de données, au travail en mode projet et à la mise à disposition de services informatiques. Ce portfolio regroupe l’ensemble de mes projets, stages et compétences acquises durant mes deux années de formation."
     },
 
     "realisations": {
@@ -44,7 +44,7 @@
     "veille": {
       "titre": "Veille technologique",
       "sous_titre": "Sujets suivis, sources fiables, synthèses (C1.6)",
-      "texte_principal": "Ma veille porte principalement sur le développement web moderne, les frameworks JavaScript, l’IA générative et la cybersécurité.",
+      "texte_principal": "Ma veille porte sur l’intelligence artificielle, la cybersécurité, les frameworks web modernes et les bonnes pratiques de développement.",
       "sujets": [
         {
           "titre": "Évolution des IA génératives",
@@ -57,7 +57,7 @@
     "contact": {
       "titre": "Contact",
       "sous_titre": "Comment me joindre",
-      "texte_principal": "Email : dylan.garnier@example.com"
+      "texte_principal": "Email : dydygrnr@mail.com"
     }
   },
 
@@ -68,40 +68,65 @@
       "periode": "2024-2025",
       "competences": ["C1.1", "C1.4", "C1.5", "C1.6"],
       "description": "Développement d’un générateur SQL permettant de créer automatiquement des requêtes à partir d’un modèle.",
+      "objectifs": "Automatiser la génération de requêtes SQL.",
+      "demarche": "Analyse du besoin, planification via WeKan, développement C# et MySQL.",
+      "resultats": "Application fonctionnelle générant des requêtes SQL correctes.",
+      "bilan": "Projet formateur sur C#, MySQL et GitLab.",
       "preuves": []
     },
+
     {
       "id": "ap23",
       "titre": "AP 2.3 — Site Statique",
       "periode": "2024-2025",
-      "competences": ["C1.3", "C1.4", "C1.6"],
-      "description": "Création d’un site web statique en HTML/CSS pour apprendre les bases du front-end.",
+      "competences": ["C1.3", "C1.4", "C1.5", "C1.6"],
+      "description": "Création d’un site web statique en HTML/CSS pour présenter la M2L.",
+      "objectifs": "Créer un site vitrine simple et responsive.",
+      "demarche": "Planification, maquettage, développement HTML/CSS, tests W3C.",
+      "resultats": "Site statique en ligne via GitLab Pages.",
+      "bilan": "Renforcement des bases HTML/CSS et des bonnes pratiques.",
       "preuves": []
     },
+
     {
       "id": "ap24",
       "titre": "AP 2.4 — Suivi des Championnats",
       "periode": "2024-2025",
-      "competences": ["C1.1", "C1.4", "C1.5", "C1.6"],
-      "description": "Application permettant de suivre des championnats sportifs avec gestion des scores et classement.",
+      "competences": ["C1.2", "C1.4", "C1.5", "C1.6"],
+      "description": "Application de gestion de championnats sportifs.",
+      "objectifs": "Ajouter des fonctionnalités : équipes, matches, arbitres.",
+      "demarche": "Analyse, planification, développement C# objet, tests.",
+      "resultats": "Application enrichie et fonctionnelle.",
+      "bilan": "Montée en compétence sur C# objet et MySQL.",
       "preuves": []
     },
+
     {
       "id": "ap11",
       "titre": "AP 1.1 — Réservation des salles M2L",
       "periode": "2024-2025",
       "competences": ["C1.1", "C1.2", "C1.4", "C1.5"],
-      "description": "Développement d’un système de réservation de salles pour la Maison des Ligues.",
+      "description": "Application de réservation de salles pour la M2L.",
+      "objectifs": "Gérer les réservations et les droits d’accès.",
+      "demarche": "Analyse RGPD, planification, développement, tests.",
+      "resultats": "Application fonctionnelle avec gestion des rôles.",
+      "bilan": "Compréhension du RGPD et des habilitations.",
       "preuves": []
     },
+
     {
       "id": "ap31",
       "titre": "AP 3.1 — Site Dynamique",
       "periode": "2025-2026",
       "competences": ["C1.3", "C1.4", "C1.5"],
-      "description": "Développement d’un site dynamique avec base de données et gestion des utilisateurs.",
+      "description": "Développement d’un site dynamique avec base de données.",
+      "objectifs": "Créer un site complet avec gestion utilisateurs.",
+      "demarche": "Conception UML, développement PHP/MySQL.",
+      "resultats": "Site dynamique fonctionnel.",
+      "bilan": "Renforcement des compétences PHP/MySQL.",
       "preuves": []
     },
+
     {
       "id": "stage1",
       "titre": "Stage 1ère année — Site e-commerce",
@@ -109,15 +134,24 @@
       "organisme": "BTS MCO — Lycée Gustave Eiffel",
       "competences": ["C1.3", "C1.4", "C1.5"],
       "description": "Développement d’un site e-commerce pour l’association du BTS MCO.",
+      "objectifs": "Créer un site de vente en ligne.",
+      "demarche": "Analyse, développement, tests panier/commande.",
+      "resultats": "Site e-commerce fonctionnel.",
+      "bilan": "Première expérience professionnelle.",
       "preuves": []
     },
+
     {
       "id": "stage2",
       "titre": "Stage 2ème année — Site vitrine",
       "periode": "26/01/2026 au 20/03/2026",
       "organisme": "Ferme Denis Laroche",
-      "competences": ["C1.3", "C1.4", "C1.5", "C1.6"],
+      "competences": ["C1.1", "C1.3", "C1.4", "C1.5", "C1.6"],
       "description": "Création d’un site vitrine moderne pour une exploitation agricole.",
+      "objectifs": "Mettre en valeur l’activité de la ferme.",
+      "demarche": "Développement, mise en ligne, accompagnement du client.",
+      "resultats": "Site vitrine opérationnel.",
+      "bilan": "Expérience client réelle et professionnalisante.",
       "preuves": []
     }
   ],
