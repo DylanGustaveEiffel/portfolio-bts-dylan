@@ -5,182 +5,139 @@
     "numero_candidat": "",
     "session": "2026",
     "option_sio": "SLAM",
-    "etablissement": "Lycée Gustave Eiffel",
-    "contact": {
-      "email": "dylan.garnier@example.com",
-      "telephone": "",
-      "linkedin": ""
-    }
+    "etablissement": "Lycée Gustave Eiffel"
   },
 
   "sections": {
     "hero": {
       "titre": "Dylan GARNIER",
       "sous_titre": "Étudiant en BTS SIO — option SLAM",
-      "texte_principal": "Bienvenue sur mon portfolio. Vous trouverez ici l'ensemble de mes réalisations professionnelles, mes compétences, mes stages et mes preuves pour l'épreuve E5.",
-      "image": ""
+      "texte_principal": "Bienvenue sur mon portfolio. Vous trouverez ici l’ensemble de mes réalisations professionnelles, mes compétences, mes stages et mes preuves pour l’épreuve E5."
     },
+
     "apropos": {
       "titre": "À propos",
       "sous_titre": "Mon parcours de professionnalisation",
-      "texte_principal": "Depuis le début de ma formation en BTS SIO option SLAM, j'ai développé des compétences solides en développement applicatif, gestion de données, conception UML, travail en mode projet et mise à disposition de services informatiques."
+      "texte_principal": "Depuis le début de ma formation en BTS SIO option SLAM, j’ai développé des compétences solides en développement applicatif, gestion de données, conception UML, travail en mode projet et mise à disposition de services informatiques. Ce portfolio regroupe l’ensemble de mes réalisations, projets, stages et compétences mobilisées."
     },
+
     "realisations": {
       "titre": "Mes réalisations",
       "sous_titre": "Projets, missions, stages"
     },
+
+    "synthese": {
+      "titre": "Tableau de synthèse",
+      "sous_titre": "Compétences mobilisées par réalisation (officiel E5)"
+    },
+
+    "attestations": {
+      "titre": "Attestations de stage",
+      "sous_titre": "Stages de 1ère et 2ème année"
+    },
+
     "competences": {
       "titre": "Compétences Bloc 1",
-      "sous_titre": "Référentiel officiel E5"
+      "sous_titre": "Référentiel officiel — cliquez pour voir le détail"
+    },
+
+    "veille": {
+      "titre": "Veille technologique",
+      "sous_titre": "Sujets suivis, sources fiables, synthèses (C1.6)",
+      "texte_principal": "Ma veille porte principalement sur le développement web moderne, les frameworks JavaScript, l’IA générative et la cybersécurité.",
+      "sujets": [
+        {
+          "titre": "Évolution des IA génératives",
+          "description": "Impact sur le développement, automatisation, productivité.",
+          "sources": []
+        }
+      ]
+    },
+
+    "contact": {
+      "titre": "Contact",
+      "sous_titre": "Comment me joindre",
+      "texte_principal": "Email : dylan.garnier@example.com"
     }
   },
-
-  "competences": [
-    {
-      "code": "C1.1",
-      "libelle": "Gérer le patrimoine informatique",
-      "description": "Recenser et identifier les ressources numériques, exploiter des référentiels, normes et standards, mettre en place les habilitations, vérifier la continuité des services, gérer les sauvegardes",
-      "indicateurs": ["Recenser du patrimoine informatique exhaustif via un outil de gestion", "Mobiliser les référentiels, normes et standards de façon pertinente"]
-    },
-    {
-      "code": "C1.2",
-      "libelle": "Répondre aux incidents et aux demandes d'assistance et d'évolution",
-      "description": "Collecter, suivre et orienter les demandes, traiter les demandes concernant les services réseau, système et applicatifs",
-      "indicateurs": ["Prendre en charge les demandes d'assistance correctement diagnostiquées"]
-    },
-    {
-      "code": "C1.3",
-      "libelle": "Développer la présence en ligne de l'organisation",
-      "description": "Participer à la valorisation de l'image, référencer les services en ligne, mesurer leur visibilité, participer à l'évolution d'un site Web",
-      "indicateurs": ["Valoriser l'image de l'organisation conformément aux attentes"]
-    },
-    {
-      "code": "C1.4",
-      "libelle": "Travailler en mode projet",
-      "description": "Analyser les objectifs et modalités d'organisation, planifier les activités, évaluer les indicateurs de suivi",
-      "indicateurs": ["Expliciter les objectifs et modalités d'organisation du projet"]
-    },
-    {
-      "code": "C1.5",
-      "libelle": "Mettre à disposition des utilisateurs un service informatique",
-      "description": "Réaliser les tests d'intégration et d'acceptation, déployer un service, accompagner les utilisateurs",
-      "indicateurs": ["Rédiger et effectuer des tests pertinents d'intégration et d'acceptation"]
-    },
-    {
-      "code": "C1.6",
-      "libelle": "Organiser son développement professionnel",
-      "description": "Mettre en place son environnement d'apprentissage personnel, mettre en œuvre des outils de veille",
-      "indicateurs": ["Délimiter et expliquer son environnement d'apprentissage personnel"]
-    }
-  ],
 
   "realisations": [
     {
       "id": "ap21",
       "titre": "AP 2.1 — Générateur SQL",
-      "categorie": "formation",
-      "description": "Développement d'un générateur SQL",
-      "periode_debut": "2024-09",
-      "periode_fin": "2024-12",
-      "competences": [
-        {"code": "C1.1", "libelle": "Gérer le patrimoine informatique", "justification": ""},
-        {"code": "C1.4", "libelle": "Travailler en mode projet", "justification": ""}
-      ],
-      "preuves": [
-        {"titre": "Code", "fichier": ""},
-        {"titre": "Rapport", "fichier": ""}
-      ]
+      "periode": "2024-2025",
+      "competences": ["C1.1", "C1.4", "C1.5", "C1.6"],
+      "description": "Développement d’un générateur SQL permettant de créer automatiquement des requêtes à partir d’un modèle.",
+      "preuves": []
     },
     {
       "id": "ap23",
       "titre": "AP 2.3 — Site Statique",
-      "categorie": "formation",
-      "description": "Site web statique en HTML/CSS",
-      "periode_debut": "2024-09",
-      "periode_fin": "2024-10",
-      "competences": [
-        {"code": "C1.3", "libelle": "Développer la présence en ligne de l'organisation", "justification": ""}
-      ],
-      "preuves": [
-        {"titre": "Site", "fichier": ""}
-      ]
+      "periode": "2024-2025",
+      "competences": ["C1.3", "C1.4", "C1.6"],
+      "description": "Création d’un site web statique en HTML/CSS pour apprendre les bases du front-end.",
+      "preuves": []
     },
     {
       "id": "ap24",
       "titre": "AP 2.4 — Suivi des Championnats",
-      "categorie": "formation",
-      "description": "Application de gestion de championnats sportifs",
-      "periode_debut": "2024-11",
-      "periode_fin": "2025-01",
-      "competences": [
-        {"code": "C1.4", "libelle": "Travailler en mode projet", "justification": ""},
-        {"code": "C1.5", "libelle": "Mettre à disposition des utilisateurs un service informatique", "justification": ""}
-      ],
-      "preuves": [
-        {"titre": "Screenshots", "fichier": ""}
-      ]
+      "periode": "2024-2025",
+      "competences": ["C1.1", "C1.4", "C1.5", "C1.6"],
+      "description": "Application permettant de suivre des championnats sportifs avec gestion des scores et classement.",
+      "preuves": []
     },
     {
       "id": "ap11",
       "titre": "AP 1.1 — Réservation des salles M2L",
-      "categorie": "formation",
-      "description": "Système de réservation pour la Maison des Ligues",
-      "periode_debut": "2024-09",
-      "periode_fin": "2025-01",
-      "competences": [
-        {"code": "C1.1", "libelle": "Gérer le patrimoine informatique", "justification": ""},
-        {"code": "C1.2", "libelle": "Répondre aux incidents et aux demandes d'assistance et d'évolution", "justification": ""}
-      ],
-      "preuves": [
-        {"titre": "Cahier des charges", "fichier": ""}
-      ]
+      "periode": "2024-2025",
+      "competences": ["C1.1", "C1.2", "C1.4", "C1.5"],
+      "description": "Développement d’un système de réservation de salles pour la Maison des Ligues.",
+      "preuves": []
     },
     {
       "id": "ap31",
       "titre": "AP 3.1 — Site Dynamique",
-      "categorie": "formation",
-      "description": "Site dynamique avec authentification",
-      "periode_debut": "2025-09",
-      "periode_fin": "2026-01",
-      "competences": [
-        {"code": "C1.3", "libelle": "Développer la présence en ligne de l'organisation", "justification": ""},
-        {"code": "C1.5", "libelle": "Mettre à disposition des utilisateurs un service informatique", "justification": ""}
-      ],
-      "preuves": [
-        {"titre": "Code", "fichier": ""}
-      ]
+      "periode": "2025-2026",
+      "competences": ["C1.3", "C1.4", "C1.5"],
+      "description": "Développement d’un site dynamique avec base de données et gestion des utilisateurs.",
+      "preuves": []
     },
     {
       "id": "stage1",
       "titre": "Stage 1ère année — Site e-commerce",
-      "categorie": "pro_annee1",
-      "description": "E-commerce pour BTS MCO",
-      "periode_debut": "2025-05",
-      "periode_fin": "2025-06",
-      "competences": [
-        {"code": "C1.3", "libelle": "Développer la présence en ligne de l'organisation", "justification": ""},
-        {"code": "C1.6", "libelle": "Organiser son développement professionnel", "justification": ""}
-      ],
-      "preuves": [
-        {"titre": "Attestation", "fichier": ""}
-      ]
+      "periode": "20/05/2025 au 20/06/2025",
+      "organisme": "BTS MCO — Lycée Gustave Eiffel",
+      "competences": ["C1.3", "C1.4", "C1.5"],
+      "description": "Développement d’un site e-commerce pour l’association du BTS MCO.",
+      "preuves": []
     },
     {
       "id": "stage2",
       "titre": "Stage 2ème année — Site vitrine",
-      "categorie": "pro_annee2",
-      "description": "Site vitrine Ferme Denis Laroche",
-      "periode_debut": "2026-01",
-      "periode_fin": "2026-03",
-      "competences": [
-        {"code": "C1.3", "libelle": "Développer la présence en ligne de l'organisation", "justification": ""},
-        {"code": "C1.5", "libelle": "Mettre à disposition des utilisateurs un service informatique", "justification": ""},
-        {"code": "C1.6", "libelle": "Organiser son développement professionnel", "justification": ""}
-      ],
-      "preuves": [
-        {"titre": "Site", "fichier": "https://fermesdenislaroche.fr/"},
-        {"titre": "Attestation", "fichier": ""}
-      ]
+      "periode": "26/01/2026 au 20/03/2026",
+      "organisme": "Ferme Denis Laroche",
+      "competences": ["C1.3", "C1.4", "C1.5", "C1.6"],
+      "description": "Création d’un site vitrine moderne pour une exploitation agricole.",
+      "preuves": []
     }
-  ]
+  ],
+
+  "attestations": {
+    "annee1": {
+      "titre": "Stage de développement d'un site web e-commerce",
+      "organisme": "BTS MCO du lycée Gustave Eiffel",
+      "periode_debut": "2025-05-20",
+      "periode_fin": "2025-06-20",
+      "fichier": ""
+    },
+    "annee2": {
+      "titre": "Stage développement web d'un site vitrine",
+      "organisme": "Ferme Denis Laroche",
+      "periode_debut": "2026-01-26",
+      "periode_fin": "2026-03-20",
+      "fichier": ""
+    }
+  },
+
+  "competences": []
 }
