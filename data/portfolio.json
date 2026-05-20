@@ -7,11 +7,12 @@
     "option_sio": "SLAM",
     "etablissement": "Lycée Gustave Eiffel",
     "contact": {
-      "email": "dydygrnr@gmail.com",
+      "email": "dylan.garnier@example.com",
       "telephone": "",
       "linkedin": ""
     }
   },
+
   "sections": {
     "hero": {
       "titre": "Dylan GARNIER",
@@ -22,441 +23,163 @@
     "apropos": {
       "titre": "À propos",
       "sous_titre": "Mon parcours de professionnalisation",
-      "texte_principal": "Depuis le début de ma formation en BTS SIO option SLAM, j'ai développé des compétences solides en développement applicatif, gestion de données, conception UML, travail en mode projet et mise à disposition de services informatiques. Ce portfolio regroupe l'ensemble de mes réalisations, projets, stages et compétences mobilisées."
+      "texte_principal": "Depuis le début de ma formation en BTS SIO option SLAM, j'ai développé des compétences solides en développement applicatif, gestion de données, conception UML, travail en mode projet et mise à disposition de services informatiques."
     },
     "realisations": {
       "titre": "Mes réalisations",
       "sous_titre": "Projets, missions, stages"
     },
-    "synthese": {
-      "titre": "Tableau de synthèse",
-      "sous_titre": "Compétences mobilisées par réalisation (officiel E5)"
-    },
-    "attestations": {
-      "titre": "Attestations de stage",
-      "sous_titre": "Stages de 1ère et 2ème année"
-    },
     "competences": {
       "titre": "Compétences Bloc 1",
-      "sous_titre": "Référentiel officiel E5",
-      "description": "Les 6 compétences majeures du Bloc 1 que j'ai mobilisées lors de mes réalisations"
-    },
-    "veille": {
-      "titre": "Veille technologique",
-      "sous_titre": "Sujets suivis, sources fiables, synthèses (C1.6)",
-      "texte_principal": "Ma veille porte principalement sur le développement web moderne, les frameworks JavaScript, l'IA générative et la cybersécurité."
-    },
-    "contact": {
-      "titre": "Contact",
-      "sous_titre": "Comment me joindre",
-      "texte_principal": "Email : dydygrnr@gmail.com"
+      "sous_titre": "Référentiel officiel E5"
     }
   },
+
   "competences": [
     {
       "code": "C1.1",
-      "titre": "Gérer le patrimoine informatique",
+      "libelle": "Gérer le patrimoine informatique",
       "description": "Recenser et identifier les ressources numériques, exploiter des référentiels, normes et standards, mettre en place les habilitations, vérifier la continuité des services, gérer les sauvegardes",
-      "niveau": "initial",
-      "indicateurs": [
-        "Recenser du patrimoine informatique exhaustif via un outil de gestion",
-        "Mobiliser les référentiels, normes et standards de façon pertinente",
-        "Mettre en place des droits correspondant aux habilitations",
-        "Vérifier les conditions de continuité et de reprise d'un service",
-        "Réaliser les sauvegardes conformément au plan prévu",
-        "Tester et valider les restaurations"
-      ]
+      "indicateurs": ["Recenser du patrimoine informatique exhaustif via un outil de gestion", "Mobiliser les référentiels, normes et standards de façon pertinente"]
     },
     {
       "code": "C1.2",
-      "titre": "Répondre aux incidents et aux demandes d'assistance et d'évolution",
+      "libelle": "Répondre aux incidents et aux demandes d'assistance et d'évolution",
       "description": "Collecter, suivre et orienter les demandes, traiter les demandes concernant les services réseau, système et applicatifs",
-      "niveau": "initial",
-      "indicateurs": [
-        "Prendre en charge les demandes d'assistance correctement diagnostiquées",
-        "Adapter les réponses à la procédure et à l'utilisateur",
-        "Utiliser une méthode de diagnostic adéquate et efficiente",
-        "Trouver et mettre en œuvre une solution à l'incident",
-        "Respecter le cycle de résolution et les normes",
-        "Produire un compte rendu d'intervention clair et explicite"
-      ]
+      "indicateurs": ["Prendre en charge les demandes d'assistance correctement diagnostiquées"]
     },
     {
       "code": "C1.3",
-      "titre": "Développer la présence en ligne de l'organisation",
+      "libelle": "Développer la présence en ligne de l'organisation",
       "description": "Participer à la valorisation de l'image, référencer les services en ligne, mesurer leur visibilité, participer à l'évolution d'un site Web",
-      "niveau": "initial",
-      "indicateurs": [
-        "Valoriser l'image de l'organisation conformément aux attentes",
-        "Identifier les enjeux économiques et respecter les obligations juridiques",
-        "Assurer que les mentions légales sont accessibles et conformes",
-        "Garantir la visibilité satisfaisante des services en ligne",
-        "Faire évoluer le site Web conformément aux besoins"
-      ]
+      "indicateurs": ["Valoriser l'image de l'organisation conformément aux attentes"]
     },
     {
       "code": "C1.4",
-      "titre": "Travailler en mode projet",
-      "description": "Analyser les objectifs et modalités d'organisation, planifier les activités, évaluer les indicateurs de suivi et analyser les écarts",
-      "niveau": "initial",
-      "indicateurs": [
-        "Expliciter les objectifs et modalités d'organisation du projet",
-        "Réaliser une analyse pertinente des besoins et de l'existant",
-        "Planifier les activités avec une méthodologie donnée",
-        "Réaliser un découpage en tâches réaliste",
-        "Livrer des livrables conformes et documentés",
-        "Justifier les écarts et adapter la communication"
-      ]
+      "libelle": "Travailler en mode projet",
+      "description": "Analyser les objectifs et modalités d'organisation, planifier les activités, évaluer les indicateurs de suivi",
+      "indicateurs": ["Expliciter les objectifs et modalités d'organisation du projet"]
     },
     {
       "code": "C1.5",
-      "titre": "Mettre à disposition des utilisateurs un service informatique",
-      "description": "Réaliser les tests d'intégration et d'acceptation, déployer un service, accompagner les utilisateurs dans sa mise en place",
-      "niveau": "initial",
-      "indicateurs": [
-        "Rédiger et effectuer des tests pertinents d'intégration et d'acceptation",
-        "Utiliser les outils de test de manière appropriée",
-        "Produire un rapport de test du service",
-        "Fournir un support d'information disponible",
-        "Définir les modalités d'accompagnement",
-        "Assurer que le service déployé est opérationnel et satisfait l'utilisateur"
-      ]
+      "libelle": "Mettre à disposition des utilisateurs un service informatique",
+      "description": "Réaliser les tests d'intégration et d'acceptation, déployer un service, accompagner les utilisateurs",
+      "indicateurs": ["Rédiger et effectuer des tests pertinents d'intégration et d'acceptation"]
     },
     {
       "code": "C1.6",
-      "titre": "Organiser son développement professionnel",
-      "description": "Mettre en place son environnement d'apprentissage personnel, mettre en œuvre des outils de veille, gérer son identité professionnelle, développer son projet professionnel",
-      "niveau": "initial",
-      "indicateurs": [
-        "Identifier les besoins de formation pour supporter ou mettre à disposition un service",
-        "Délimiter et expliquer son environnement d'apprentissage personnel",
-        "Maintenir une veille régulière sur les techniques et technologies émergentes",
-        "Renforcer ses compétences via des moyens de recherche d'information",
-        "Développer une identité professionnelle pertinente et visible"
-      ]
+      "libelle": "Organiser son développement professionnel",
+      "description": "Mettre en place son environnement d'apprentissage personnel, mettre en œuvre des outils de veille",
+      "indicateurs": ["Délimiter et expliquer son environnement d'apprentissage personnel"]
     }
   ],
+
   "realisations": [
     {
       "id": "ap21",
       "titre": "AP 2.1 — Générateur SQL",
       "categorie": "formation",
-      "description": "Développement d'un générateur SQL permettant de créer automatiquement des requêtes SQL à partir d'un modèle de données.",
-      "periode_debut": "2024-09-01",
-      "periode_fin": "2024-12-31",
-      "technologies": [
-        "Python",
-        "SQL",
-        "POO"
-      ],
+      "description": "Développement d'un générateur SQL",
+      "periode_debut": "2024-09",
+      "periode_fin": "2024-12",
       "competences": [
-        {
-          "code": "C1.1",
-          "titre": "Gérer le patrimoine informatique"
-        },
-        {
-          "code": "C1.4",
-          "titre": "Travailler en mode projet"
-        },
-        {
-          "code": "C1.5",
-          "titre": "Mettre à disposition des utilisateurs un service informatique"
-        },
-        {
-          "code": "C1.6",
-          "titre": "Organiser son développement professionnel"
-        }
+        {"code": "C1.1", "libelle": "Gérer le patrimoine informatique", "justification": ""},
+        {"code": "C1.4", "libelle": "Travailler en mode projet", "justification": ""}
       ],
       "preuves": [
-        {
-          "titre": "Code source",
-          "url": "",
-          "type": "code"
-        },
-        {
-          "titre": "Démonstration",
-          "url": "",
-          "type": "video"
-        },
-        {
-          "titre": "Rapport",
-          "url": "",
-          "type": "doc"
-        }
+        {"titre": "Code", "fichier": ""},
+        {"titre": "Rapport", "fichier": ""}
       ]
     },
     {
       "id": "ap23",
       "titre": "AP 2.3 — Site Statique",
       "categorie": "formation",
-      "description": "Création d'un site web statique en HTML/CSS pour apprendre les bases du front-end.",
-      "periode_debut": "2024-09-01",
-      "periode_fin": "2024-10-31",
-      "technologies": [
-        "HTML5",
-        "CSS3",
-        "Responsive Design"
-      ],
+      "description": "Site web statique en HTML/CSS",
+      "periode_debut": "2024-09",
+      "periode_fin": "2024-10",
       "competences": [
-        {
-          "code": "C1.3",
-          "titre": "Développer la présence en ligne de l'organisation"
-        },
-        {
-          "code": "C1.4",
-          "titre": "Travailler en mode projet"
-        },
-        {
-          "code": "C1.6",
-          "titre": "Organiser son développement professionnel"
-        }
+        {"code": "C1.3", "libelle": "Développer la présence en ligne de l'organisation", "justification": ""}
       ],
       "preuves": [
-        {
-          "titre": "Site en ligne",
-          "url": "",
-          "type": "screenshot"
-        },
-        {
-          "titre": "Code source",
-          "url": "",
-          "type": "code"
-        }
+        {"titre": "Site", "fichier": ""}
       ]
     },
     {
       "id": "ap24",
       "titre": "AP 2.4 — Suivi des Championnats",
       "categorie": "formation",
-      "description": "Application permettant de suivre des championnats sportifs avec gestion des scores et classement.",
-      "periode_debut": "2024-11-01",
-      "periode_fin": "2025-01-31",
-      "technologies": [
-        "PHP",
-        "MySQL",
-        "HTML/CSS",
-        "JavaScript"
-      ],
+      "description": "Application de gestion de championnats sportifs",
+      "periode_debut": "2024-11",
+      "periode_fin": "2025-01",
       "competences": [
-        {
-          "code": "C1.1",
-          "titre": "Gérer le patrimoine informatique"
-        },
-        {
-          "code": "C1.4",
-          "titre": "Travailler en mode projet"
-        },
-        {
-          "code": "C1.5",
-          "titre": "Mettre à disposition des utilisateurs un service informatique"
-        },
-        {
-          "code": "C1.6",
-          "titre": "Organiser son développement professionnel"
-        }
+        {"code": "C1.4", "libelle": "Travailler en mode projet", "justification": ""},
+        {"code": "C1.5", "libelle": "Mettre à disposition des utilisateurs un service informatique", "justification": ""}
       ],
       "preuves": [
-        {
-          "titre": "Screenshots",
-          "url": "",
-          "type": "screenshot"
-        },
-        {
-          "titre": "Code source",
-          "url": "",
-          "type": "code"
-        }
+        {"titre": "Screenshots", "fichier": ""}
       ]
     },
     {
       "id": "ap11",
       "titre": "AP 1.1 — Réservation des salles M2L",
       "categorie": "formation",
-      "description": "Développement d'un système de réservation de salles pour la Maison des Ligues.",
-      "periode_debut": "2024-09-01",
-      "periode_fin": "2025-01-31",
-      "technologies": [
-        "PHP",
-        "MySQL",
-        "HTML5",
-        "CSS3",
-        "JavaScript"
-      ],
+      "description": "Système de réservation pour la Maison des Ligues",
+      "periode_debut": "2024-09",
+      "periode_fin": "2025-01",
       "competences": [
-        {
-          "code": "C1.1",
-          "titre": "Gérer le patrimoine informatique"
-        },
-        {
-          "code": "C1.2",
-          "titre": "Répondre aux incidents et aux demandes d'assistance"
-        },
-        {
-          "code": "C1.4",
-          "titre": "Travailler en mode projet"
-        },
-        {
-          "code": "C1.5",
-          "titre": "Mettre à disposition des utilisateurs un service informatique"
-        }
+        {"code": "C1.1", "libelle": "Gérer le patrimoine informatique", "justification": ""},
+        {"code": "C1.2", "libelle": "Répondre aux incidents et aux demandes d'assistance et d'évolution", "justification": ""}
       ],
       "preuves": [
-        {
-          "titre": "Cahier des charges",
-          "url": "",
-          "type": "doc"
-        },
-        {
-          "titre": "Démonstration",
-          "url": "",
-          "type": "video"
-        }
+        {"titre": "Cahier des charges", "fichier": ""}
       ]
     },
     {
       "id": "ap31",
       "titre": "AP 3.1 — Site Dynamique",
       "categorie": "formation",
-      "description": "Développement d'un site web dynamique avec authentification et gestion du contenu.",
-      "periode_debut": "2025-09-01",
-      "periode_fin": "2026-01-31",
-      "technologies": [
-        "PHP 8",
-        "MySQL",
-        "HTML5",
-        "CSS3",
-        "JavaScript",
-        "MVC"
-      ],
+      "description": "Site dynamique avec authentification",
+      "periode_debut": "2025-09",
+      "periode_fin": "2026-01",
       "competences": [
-        {
-          "code": "C1.1",
-          "titre": "Gérer le patrimoine informatique"
-        },
-        {
-          "code": "C1.3",
-          "titre": "Développer la présence en ligne de l'organisation"
-        },
-        {
-          "code": "C1.4",
-          "titre": "Travailler en mode projet"
-        },
-        {
-          "code": "C1.5",
-          "titre": "Mettre à disposition des utilisateurs un service informatique"
-        }
+        {"code": "C1.3", "libelle": "Développer la présence en ligne de l'organisation", "justification": ""},
+        {"code": "C1.5", "libelle": "Mettre à disposition des utilisateurs un service informatique", "justification": ""}
       ],
       "preuves": [
-        {
-          "titre": "Site en ligne",
-          "url": "",
-          "type": "screenshot"
-        },
-        {
-          "titre": "Code source",
-          "url": "",
-          "type": "code"
-        }
+        {"titre": "Code", "fichier": ""}
       ]
     },
     {
       "id": "stage1",
       "titre": "Stage 1ère année — Site e-commerce",
       "categorie": "pro_annee1",
-      "description": "Développement d'un site e-commerce pour l'association du BTS MCO.",
-      "periode_debut": "2025-05-20",
-      "periode_fin": "2025-06-20",
-      "technologies": [
-        "PHP",
-        "MySQL",
-        "HTML/CSS",
-        "JavaScript"
-      ],
+      "description": "E-commerce pour BTS MCO",
+      "periode_debut": "2025-05",
+      "periode_fin": "2025-06",
       "competences": [
-        {
-          "code": "C1.3",
-          "titre": "Développer la présence en ligne de l'organisation"
-        },
-        {
-          "code": "C1.5",
-          "titre": "Mettre à disposition des utilisateurs un service informatique"
-        },
-        {
-          "code": "C1.6",
-          "titre": "Organiser son développement professionnel"
-        }
+        {"code": "C1.3", "libelle": "Développer la présence en ligne de l'organisation", "justification": ""},
+        {"code": "C1.6", "libelle": "Organiser son développement professionnel", "justification": ""}
       ],
       "preuves": [
-        {
-          "titre": "Attestation de stage",
-          "url": "",
-          "type": "doc"
-        },
-        {
-          "titre": "Rapport de stage",
-          "url": "",
-          "type": "doc"
-        },
-        {
-          "titre": "Démonstration",
-          "url": "",
-          "type": "video"
-        }
+        {"titre": "Attestation", "fichier": ""}
       ]
     },
     {
       "id": "stage2",
-      "titre": "Stage 2ème année — Site vitrine Ferme Denis Laroche",
+      "titre": "Stage 2ème année — Site vitrine",
       "categorie": "pro_annee2",
-      "description": "Création d'un site vitrine moderne pour une exploitation agricole.",
-      "periode_debut": "2026-01-26",
-      "periode_fin": "2026-03-20",
-      "technologies": [
-        "PHP",
-        "MySQL",
-        "HTML5",
-        "CSS3",
-        "JavaScript",
-        "Responsive Design"
-      ],
+      "description": "Site vitrine Ferme Denis Laroche",
+      "periode_debut": "2026-01",
+      "periode_fin": "2026-03",
       "competences": [
-        {
-          "code": "C1.1",
-          "titre": "Gérer le patrimoine informatique"
-        },
-        {
-          "code": "C1.2",
-          "titre": "Répondre aux incidents et aux demandes d'assistance"
-        },
-        {
-          "code": "C1.3",
-          "titre": "Développer la présence en ligne de l'organisation"
-        },
-        {
-          "code": "C1.5",
-          "titre": "Mettre à disposition des utilisateurs un service informatique"
-        },
-        {
-          "code": "C1.6",
-          "titre": "Organiser son développement professionnel"
-        }
+        {"code": "C1.3", "libelle": "Développer la présence en ligne de l'organisation", "justification": ""},
+        {"code": "C1.5", "libelle": "Mettre à disposition des utilisateurs un service informatique", "justification": ""},
+        {"code": "C1.6", "libelle": "Organiser son développement professionnel", "justification": ""}
       ],
       "preuves": [
-        {
-          "titre": "Attestation de stage",
-          "url": "",
-          "type": "doc"
-        },
-        {
-          "titre": "Site en ligne",
-          "url": "https://fermesdenislaroche.fr/",
-          "type": "link"
-        },
-        {
-          "titre": "Rapport de stage",
-          "url": "",
-          "type": "doc"
-        }
+        {"titre": "Site", "fichier": "https://fermesdenislaroche.fr/"},
+        {"titre": "Attestation", "fichier": ""}
       ]
     }
   ]
