@@ -203,6 +203,7 @@ Utilise toujours le même schéma — le jury sera rassuré :
 - ❌ Lire ses diapos / son portfolio en boucle
 - ❌ Oublier les preuves dans le portfolio (le jury va regarder !)
 - ❌ Ne pas avoir les 2 attestations de stage à jour
+- ❌ Ne pas avoir reformulé chaque compétence du Bloc 1 avec TES mots (clic sur une compétence dans le portfolio → page dédiée)
 
 ---
 

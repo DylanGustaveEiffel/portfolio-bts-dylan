@@ -32,12 +32,13 @@
     },
     "competences": {
       "titre": "Compétences Bloc 1",
-      "sous_titre": "Référentiel officiel — sous-compétences et indicateurs"
+      "sous_titre": "Référentiel officiel — clique sur une compétence pour voir le détail"
     },
     "veille": {
       "titre": "Veille technologique",
-      "sous_titre": "Sujets suivis, sources, synthèses",
-      "texte_principal": ""
+      "sous_titre": "Sujets suivis, sources fiables, synthèses (C1.6)",
+      "texte_principal": "",
+      "sujets": []
     },
     "contact": {
       "titre": "Contact",
@@ -54,6 +55,7 @@
     {
       "code": "C1.1",
       "libelle": "Gérer le patrimoine informatique",
+      "reformulation": "",
       "sous_competences": [
         "Recenser et identifier les ressources numériques",
         "Exploiter des référentiels, normes et standards adoptés par le prestataire informatique",
@@ -75,6 +77,7 @@
     {
       "code": "C1.2",
       "libelle": "Répondre aux incidents et aux demandes d'assistance et d'évolution",
+      "reformulation": "",
       "sous_competences": [
         "Collecter, suivre et orienter des demandes",
         "Traiter des demandes concernant les services réseau et système",
@@ -94,6 +97,7 @@
     {
       "code": "C1.3",
       "libelle": "Développer la présence en ligne de l'organisation",
+      "reformulation": "",
       "sous_competences": [
         "Participer à la valorisation de l'image de l'organisation sur les médias numériques en tenant compte du cadre juridique et des enjeux économiques",
         "Référencer les services en ligne de l'organisation et mesurer leur visibilité",
@@ -110,6 +114,7 @@
     {
       "code": "C1.4",
       "libelle": "Travailler en mode projet",
+      "reformulation": "",
       "sous_competences": [
         "Analyser les objectifs et les modalités d'organisation d'un projet",
         "Planifier les activités",
@@ -129,6 +134,7 @@
     {
       "code": "C1.5",
       "libelle": "Mettre à disposition des utilisateurs un service informatique",
+      "reformulation": "",
       "sous_competences": [
         "Réaliser les tests d'intégration et d'acceptation d'un service",
         "Déployer un service",
@@ -146,6 +152,7 @@
     {
       "code": "C1.6",
       "libelle": "Organiser son développement professionnel",
+      "reformulation": "",
       "sous_competences": [
         "Mettre en place son environnement d'apprentissage personnel",
         "Mettre en œuvre des outils et stratégies de veille informationnelle",

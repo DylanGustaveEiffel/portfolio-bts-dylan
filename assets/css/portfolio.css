@@ -368,6 +368,138 @@ body.mode-edition .bloc__actions-edition[hidden] { display: block; }
     z-index: 80;
 }
 
+/* ===========================================================================
+   STATISTIQUES (exploitation des données — démontre C1.3)
+   =========================================================================== */
+.bloc--stats { padding: 2rem 0; background: var(--c-fond-alt); border-block: 1px solid var(--c-bord); }
+.stat-grille {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+.stat-cell {
+    text-align: center; padding: 1.25rem .5rem;
+    background: linear-gradient(180deg, #fff, #f8fafc);
+    border: 1px solid var(--c-bord); border-radius: var(--rayon);
+    transition: transform .2s, box-shadow .2s;
+}
+.stat-cell:hover { transform: translateY(-2px); box-shadow: var(--ombre); }
+.stat-cell__val {
+    font-family: var(--police-titre); font-weight: 700; font-size: 2rem;
+    color: var(--c-accent-fonce); line-height: 1;
+}
+.stat-cell__lib {
+    margin-top: .35rem; font-size: .8rem; color: var(--c-encre-doux);
+    text-transform: uppercase; letter-spacing: .05em; font-weight: 600;
+}
+.stat-explication { margin-top: 1rem; text-align: center; color: var(--c-encre-doux); font-size: .85rem; }
+.stat-explication code { background: #f1f5f9; padding: .1rem .35rem; border-radius: 4px; }
+
+/* ===========================================================================
+   PUCES CLIQUABLES (liens vers les pages compétences)
+   =========================================================================== */
+.puce--lien {
+    background: #eff6ff; color: var(--c-accent-fonce); cursor: pointer;
+    text-decoration: none; transition: background-color .2s, transform .15s;
+    margin: .15rem .15rem .15rem 0; display: inline-block;
+}
+.puce--lien:hover, .puce--lien:focus-visible {
+    background: var(--c-accent); color: #fff; text-decoration: none;
+    transform: translateY(-1px);
+}
+.legende-item {
+    display: block; padding: .35rem 0; color: var(--c-encre-doux);
+    text-decoration: none; transition: color .2s;
+}
+.legende-item:hover { color: var(--c-accent); text-decoration: underline; }
+.legende-item strong { color: var(--c-accent-fonce); }
+
+/* ===========================================================================
+   SOUS-BLOCS DES RÉALISATIONS (Objectifs, Démarche, Résultats, Bilan…)
+   =========================================================================== */
+.carte__sous-bloc {
+    margin: .5rem 0; padding: .55rem .75rem;
+    background: #fafbfc; border-left: 2px solid var(--c-bord);
+    border-radius: 0 6px 6px 0; font-size: .92rem;
+}
+.carte__sous-bloc > strong { color: var(--c-accent-fonce); display: inline-block; margin-right: .25rem; }
+.carte__sous-bloc > div { display: inline; color: var(--c-encre-doux); }
+
+/* Badge compteur (nombre de réalisations par catégorie / compétence) */
+.badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 1.5rem; height: 1.5rem; padding: 0 .5rem;
+    background: var(--c-bord); color: var(--c-encre-doux);
+    border-radius: 999px; font-size: .75rem; font-weight: 700;
+}
+.badge--ok { background: var(--c-vert); color: #fff; }
+
+/* ===========================================================================
+   PAGE DÉDIÉE D'UNE COMPÉTENCE (route #/competence/Cx.y)
+   =========================================================================== */
+.lien-retour {
+    display: inline-flex; align-items: center; gap: .35rem;
+    margin-bottom: 2rem; color: var(--c-accent); font-weight: 600;
+}
+.lien-retour:hover { text-decoration: underline; }
+
+.bloc--competence { padding-block: 3rem; }
+.competence-page__header {
+    display: flex; gap: 1.5rem; align-items: center; margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem; border-bottom: 2px solid var(--c-bord);
+}
+.competence__code--big {
+    min-width: 5rem; height: 5rem; font-size: 1.5rem;
+    background: linear-gradient(135deg, var(--c-accent), var(--c-accent-fonce));
+}
+.competence-page__titre {
+    margin: 0; font-family: var(--police-titre); font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.2;
+}
+.competence-page__sous-titre { margin: .35rem 0 0; color: var(--c-encre-doux); }
+.competence-page__bloc {
+    margin-bottom: 2.5rem; padding: 1.5rem;
+    background: var(--c-fond-alt); border: 1px solid var(--c-bord);
+    border-radius: var(--rayon); box-shadow: var(--ombre);
+}
+.competence-page__bloc h2 {
+    margin: 0 0 1rem; font-family: var(--police-titre); font-size: 1.2rem;
+    color: var(--c-encre);
+}
+.competence-page__reform {
+    padding: 1rem; background: #f0f7ff; border-left: 3px solid var(--c-accent);
+    border-radius: 0 6px 6px 0;
+}
+
+/* Liste sous-compétences visible (au lieu de cachée dans details) */
+.sous-liste--visible {
+    list-style: disc; padding-left: 1.5rem; color: var(--c-encre);
+}
+.sous-liste--visible li { margin-bottom: .5rem; line-height: 1.5; }
+.sous-liste--indic.sous-liste--visible li::marker { color: var(--c-accent); }
+
+/* Réformulation affichée dans la liste des compétences */
+.competence__reform {
+    margin: .25rem 0 0; padding: .35rem .65rem;
+    background: #f0f7ff; border-radius: 4px;
+    color: var(--c-encre); font-size: .9rem;
+}
+
+/* ===========================================================================
+   VEILLE TECHNOLOGIQUE — sujets structurés
+   =========================================================================== */
+.grille-veille {
+    display: grid; gap: 1rem; margin-top: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+.veille-sujet {
+    background: var(--c-fond-alt); border: 1px solid var(--c-bord);
+    border-radius: var(--rayon); padding: 1.25rem; box-shadow: var(--ombre);
+    display: flex; flex-direction: column; gap: .5rem;
+}
+.veille-sujet h4 { margin: 0; font-family: var(--police-titre); color: var(--c-accent-fonce); }
+.veille-sujet .sources-liste { margin: .25rem 0; padding-left: 1.25rem; font-size: .9rem; }
+.veille-sujet details summary { cursor: pointer; color: var(--c-accent); font-weight: 600; }
+
 /* Importation des polices (CDN gratuit, sans tracking lourd) */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 

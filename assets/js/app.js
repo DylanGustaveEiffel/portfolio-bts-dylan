@@ -1,50 +1,50 @@
 /* ============================================================================
- * assets/js/app.js
+ * assets/js/app.js — Portfolio BTS SIO (version statique, GitHub Pages)
  * ----------------------------------------------------------------------------
- * Portfolio BTS SIO — version STATIQUE (GitHub Pages).
+ * Architecture façon MVC en JavaScript :
+ *  - MODÈLE      : App.data (chargé depuis data/portfolio.json + localStorage)
+ *  - VUE         : fonctions render* qui produisent du HTML
+ *  - CONTRÔLEUR  : router (hash), gestionnaires d'événements, fonctions editer*
  *
- * AVANT : portfolio dynamique en PHP/MySQL (voir /php-mvc/).
- * APRÈS : portfolio statique HTML/CSS/JS — fonctionne SUR GITHUB PAGES.
+ * ROUTES (basées sur location.hash) :
+ *  - #/                       → page d'accueil
+ *  - #/competence/C1.1        → fiche détaillée d'une compétence avec
+ *                                reformulation perso, sous-compétences,
+ *                                indicateurs et liste des réalisations
+ *                                qui mobilisent cette compétence.
  *
- * RÔLE :
- *  1) Charge les données depuis /data/portfolio.json
- *  2) Si l'utilisateur a édité en local, écrase avec ce qu'il y a dans localStorage
- *  3) Génère toutes les sections de la page (Profil, Hero, À propos, Réalisations,
- *     Tableau de synthèse, Attestations, Compétences détaillées, Veille, Contact)
- *  4) Mode édition : ouvre un panneau latéral pour modifier les sections, les
- *     réalisations, le profil, etc. Les modifications sont stockées dans
- *     localStorage.
- *  5) Boutons d'export / import JSON pour committer ses changements sur GitHub.
- *
- * Architecture façon MVC (allégée, en JS) :
- *  - MODÈLE      : objet `App.data` (chargé depuis JSON / localStorage)
- *  - VUE         : fonctions `render*` qui produisent du HTML
- *  - CONTRÔLEUR  : `init()`, gestionnaires d'événements, fonctions `editer*`
+ * EXPLOITATION DES DONNÉES (C1.3) :
+ *  Le fichier data/portfolio.json joue le rôle d'une base de données.
+ *  L'application calcule dynamiquement :
+ *   - compteur de réalisations par catégorie
+ *   - taux de couverture des 6 compétences
+ *   - filtre des réalisations par compétence (page compétence)
+ *  -> démontre l'EXPLOITATION et l'AGRÉGATION des données.
  * ============================================================================ */
 'use strict';
 
-// ---------------------------------------------------------------------------
-// 1) ÉTAT GLOBAL
-// ---------------------------------------------------------------------------
 const App = {
-    data: null,         // données du portfolio (chargées au démarrage)
-    modeEdition: false, // booléen mode édition
-    LS_KEY: 'portfolio-btssio-data-v1', // clé localStorage
+    data: null,
+    modeEdition: false,
+    LS_KEY: 'portfolio-btssio-data-v2',
 };
 
-// ---------------------------------------------------------------------------
-// 2) UTILITAIRES
-// ---------------------------------------------------------------------------
-/** Échappement HTML pour éviter les injections XSS. */
+const LIBELLES_CAT = {
+    formation:  'En cours de formation',
+    pro_annee1: 'Milieu pro · 1ère année',
+    pro_annee2: 'Milieu pro · 2ème année',
+};
+
+// =============================================================================
+// UTILITAIRES
+// =============================================================================
 function esc(v) {
     return String(v ?? '')
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
-/** Insère <br> au lieu des sauts de ligne (texte multi-ligne). */
 function nl2br(v) { return esc(v).replace(/\n/g, '<br>'); }
 
-/** Mini-helper pour créer un élément DOM avec attributs et enfants. */
 function h(tag, attrs = {}, ...children) {
     const el = document.createElement(tag);
     for (const [k, v] of Object.entries(attrs)) {
@@ -62,7 +62,6 @@ function h(tag, attrs = {}, ...children) {
     return el;
 }
 
-/** Affiche une notification "toast". */
 function toast(message, type = 'info') {
     const el = document.createElement('div');
     el.className = `toast toast--${type}`;
@@ -72,44 +71,68 @@ function toast(message, type = 'info') {
     setTimeout(() => el.remove(), 2500);
 }
 
-/** Formate une période "JJ/MM/AA → JJ/MM/AA" (officiel E5). */
 function periodeCourte(d, f) {
     const fmt = (s) => s ? new Date(s).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' }) : '…';
     if (!d && !f) return '—';
     return `du ${fmt(d)} au ${fmt(f)}`;
 }
 
-const LIBELLES_CAT = {
-    formation:  'En cours de formation',
-    pro_annee1: 'Milieu pro · 1ère année',
-    pro_annee2: 'Milieu pro · 2ème année',
-};
-
-/** Sauvegarde l'état actuel dans localStorage. */
 function sauverLocal() {
     try { localStorage.setItem(App.LS_KEY, JSON.stringify(App.data)); }
     catch (e) { console.warn('Sauvegarde localStorage échouée', e); }
 }
 
-// ---------------------------------------------------------------------------
-// 3) CHARGEMENT DES DONNÉES
-// ---------------------------------------------------------------------------
+/** Construit un lien vers la page d'une compétence. */
+function lienCompetence(code, contenuHTML, classe = 'puce') {
+    return `<a href="#/competence/${esc(code)}" class="${classe}" data-testid="lien-${esc(code)}">${contenuHTML}</a>`;
+}
+
+// =============================================================================
+// CHARGEMENT DES DONNÉES
+// =============================================================================
 async function chargerDonnees() {
-    // 1) On essaie d'abord la copie locale (modifs non encore committées)
     const local = localStorage.getItem(App.LS_KEY);
     if (local) {
         try { App.data = JSON.parse(local); return; }
-        catch (e) { console.warn('localStorage corrompu, on charge JSON'); }
+        catch (e) { console.warn('localStorage corrompu, on charge JSON officiel'); }
     }
-    // 2) Sinon on charge le JSON officiel depuis le repo
     const r = await fetch('data/portfolio.json', { cache: 'no-cache' });
     if (!r.ok) throw new Error('Impossible de charger data/portfolio.json');
     App.data = await r.json();
 }
 
-// ---------------------------------------------------------------------------
-// 4) VUES (rendu HTML)
-// ---------------------------------------------------------------------------
+// =============================================================================
+// FONCTIONS D'EXPLOITATION DES DONNÉES (statistiques)
+// =============================================================================
+function statistiques() {
+    const reals = App.data.realisations || [];
+    const codes = new Set();
+    let nbPreuves = 0;
+    for (const r of reals) {
+        (r.competences || []).forEach(c => codes.add(c.code));
+        nbPreuves += (r.preuves || []).length;
+    }
+    return {
+        nbReals: reals.length,
+        nbFormation:  reals.filter(r => r.categorie === 'formation').length,
+        nbAnnee1:     reals.filter(r => r.categorie === 'pro_annee1').length,
+        nbAnnee2:     reals.filter(r => r.categorie === 'pro_annee2').length,
+        nbCompMob:    codes.size,
+        tauxCouv:     Math.round((codes.size / App.data.competences.length) * 100),
+        nbPreuves,
+    };
+}
+
+/** Liste les réalisations qui mobilisent une compétence donnée. */
+function realisationsParCompetence(code) {
+    return (App.data.realisations || []).filter(r =>
+        (r.competences || []).some(c => c.code === code)
+    );
+}
+
+// =============================================================================
+// VUES (rendu HTML)
+// =============================================================================
 
 function renderHero() {
     const { profil, sections } = App.data;
@@ -122,7 +145,7 @@ function renderHero() {
         : esc(hero.sous_titre);
 
     return `
-    <section id="hero" class="hero" data-section-code="hero">
+    <section id="hero" class="hero">
         <div class="conteneur hero__inner">
             <div class="hero__texte">
                 <p class="hero__eyebrow">Portfolio · BTS SIO · Épreuve E5 — Bloc 1</p>
@@ -133,14 +156,41 @@ function renderHero() {
                 <p class="hero__intro" data-edit="section" data-section="hero" data-champ="texte_principal"
                    data-testid="hero-intro">${nl2br(hero.texte_principal) || '<em style="color:#94a3b8">✍️ Cliquez sur « Mode édition » pour vous présenter ici.</em>'}</p>
                 <div class="hero__cta">
-                    <a class="btn btn--primaire" href="#realisations" data-testid="cta-realisations">Voir mes réalisations</a>
-                    <a class="btn btn--secondaire" href="#synthese" data-testid="cta-synthese">Tableau de synthèse</a>
+                    <a class="btn btn--primaire" href="#realisations">Voir mes réalisations</a>
+                    <a class="btn btn--secondaire" href="#synthese">Tableau de synthèse</a>
                 </div>
             </div>
             <div class="hero__visuel" aria-hidden="true">
                 <div class="hero__cercle"></div>
                 <div class="hero__motif"></div>
             </div>
+        </div>
+    </section>`;
+}
+
+function renderStats() {
+    const s = statistiques();
+    const cell = (val, lib, testid) => `
+        <div class="stat-cell" data-testid="${testid}">
+            <div class="stat-cell__val">${val}</div>
+            <div class="stat-cell__lib">${lib}</div>
+        </div>`;
+    return `
+    <section id="stats" class="bloc bloc--stats" aria-label="Statistiques exploitées depuis les données">
+        <div class="conteneur">
+            <div class="stat-grille" data-testid="stats-grille">
+                ${cell(s.nbReals, 'Réalisations', 'stat-reals')}
+                ${cell(s.nbFormation, 'En formation', 'stat-formation')}
+                ${cell(s.nbAnnee1, 'Pro 1ère année', 'stat-annee1')}
+                ${cell(s.nbAnnee2, 'Pro 2ème année', 'stat-annee2')}
+                ${cell(`${s.nbCompMob}/6`, 'Compétences mobilisées', 'stat-comps')}
+                ${cell(`${s.tauxCouv}%`, 'Taux de couverture', 'stat-couv')}
+                ${cell(s.nbPreuves, 'Preuves', 'stat-preuves')}
+            </div>
+            <p class="stat-explication">
+                <em>Ces statistiques sont calculées dynamiquement à partir des données du portfolio
+                (fichier <code>data/portfolio.json</code>) — exploitation des données structurées en JavaScript.</em>
+            </p>
         </div>
     </section>`;
 }
@@ -179,7 +229,6 @@ function renderProfil() {
 function renderSectionTexte(code, testidPrefix, defaultText) {
     const s = App.data.sections[code] || {};
     const isAlt = ['apropos','attestations','contact'].includes(code) ? ' bloc--alt' : '';
-    const texte = s.texte_principal || `<em style="color:#94a3b8">✍️ ${defaultText}</em>`;
     return `
     <section id="${code}" class="bloc${isAlt}">
         <div class="conteneur">
@@ -201,22 +250,35 @@ function renderRealisations() {
     const parCat = { formation: [], pro_annee1: [], pro_annee2: [] };
     for (const r of reals) (parCat[r.categorie] || parCat.formation).push(r);
 
+    const sectionBloc = (label, html) => html
+        ? `<div class="carte__sous-bloc"><strong>${label} :</strong><div>${html}</div></div>`
+        : '';
+
     const carte = (r) => `
         <article class="carte" data-realisation-id="${esc(r.id)}" data-testid="realisation-${esc(r.id)}">
             <header class="carte__entete">
                 <h4 class="carte__titre">${esc(r.titre)}</h4>
                 <time class="carte__date">${esc(periodeCourte(r.periode_debut, r.periode_fin))}</time>
             </header>
-            ${r.contexte ? `<p class="carte__contexte"><strong>Contexte :</strong> ${esc(r.contexte)}</p>` : ''}
-            ${r.description ? `<p class="carte__desc">${nl2br(r.description)}</p>` : ''}
-            ${r.contribution_personnelle ? `<p class="carte__contrib"><strong>Ma contribution :</strong> ${nl2br(r.contribution_personnelle)}</p>` : ''}
-            ${r.travail_equipe ? `<p class="carte__equipe"><span class="puce puce--equipe">👥 Travail en équipe</span></p>` : ''}
-            ${r.technologies ? `<p class="carte__tech"><strong>Technos :</strong> ${esc(r.technologies)}</p>` : ''}
+            ${r.contexte    ? sectionBloc('Contexte', nl2br(r.contexte)) : ''}
+            ${r.objectifs   ? sectionBloc('Objectifs', nl2br(r.objectifs)) : ''}
+            ${r.demarche    ? sectionBloc('Démarche', nl2br(r.demarche)) : ''}
+            ${r.description ? sectionBloc('Description', nl2br(r.description)) : ''}
+            ${r.contribution_personnelle ? `<div class="carte__contrib"><strong>⭐ Ma contribution personnelle :</strong> ${nl2br(r.contribution_personnelle)}</div>` : ''}
+            ${r.resultats   ? sectionBloc('Résultats', nl2br(r.resultats)) : ''}
+            ${r.bilan       ? sectionBloc('Bilan personnel', nl2br(r.bilan)) : ''}
+            ${r.travail_equipe ? `<p class="carte__equipe"><span class="puce puce--equipe">👥 Travail en équipe projet</span></p>` : ''}
+            ${r.technologies ? `<p class="carte__tech"><strong>Technologies :</strong> ${esc(r.technologies)}</p>` : ''}
             ${r.competences?.length ? `<div class="carte__competences">
-                ${r.competences.map(c => `<span class="puce" title="${esc(c.justification || '')}">${esc(c.code)}</span>`).join('')}
+                <strong>Compétences mobilisées :</strong>
+                ${r.competences.map(c => {
+                    const comp = App.data.competences.find(x => x.code === c.code);
+                    const label = `${esc(c.code)} — ${esc(comp?.libelle || '')}`;
+                    return lienCompetence(c.code, label, 'puce puce--lien');
+                }).join('')}
             </div>` : ''}
             ${r.preuves?.length ? `<details class="carte__preuves">
-                <summary>Preuves (${r.preuves.length})</summary>
+                <summary>📎 Preuves (${r.preuves.length})</summary>
                 <ul>${r.preuves.map(p => `<li><a href="${esc(p.fichier)}" target="_blank" rel="noopener">${esc(p.titre)}</a></li>`).join('')}</ul>
             </details>` : ''}
             <div class="carte__actions">
@@ -236,7 +298,7 @@ function renderRealisations() {
                    data-testid="realisations-subtitle">${esc(s.sous_titre)}</p>
             </header>
             ${['formation', 'pro_annee1', 'pro_annee2'].map(cat => `
-                <h3 class="categorie-titre">${esc(LIBELLES_CAT[cat])}</h3>
+                <h3 class="categorie-titre">${esc(LIBELLES_CAT[cat])} <span class="badge">${parCat[cat].length}</span></h3>
                 <div class="grille-cartes" data-testid="realisations-${cat}">
                     ${parCat[cat].length === 0 ? '<p class="vide">Aucune réalisation dans cette catégorie.</p>' : ''}
                     ${parCat[cat].map(carte).join('')}
@@ -257,15 +319,14 @@ function renderSynthese() {
     const parCat = { formation: [], pro_annee1: [], pro_annee2: [] };
     for (const r of reals) (parCat[r.categorie] || parCat.formation).push(r);
 
-    const codesMobilises = (r) => (r.competences || []).map(c => c.code);
+    const codesMob = (r) => (r.competences || []).map(c => c.code);
     const span = 2 + comps.length;
-
     let lignes = '';
     for (const cat of ['formation','pro_annee1','pro_annee2']) {
         if (!parCat[cat].length) continue;
         lignes += `<tr class="ligne-categorie"><th colspan="${span}">${esc(LIBELLES_CAT[cat])}</th></tr>`;
         for (const r of parCat[cat]) {
-            const mob = codesMobilises(r);
+            const mob = codesMob(r);
             lignes += `<tr>
                 <th scope="row">${esc(r.titre)}</th>
                 <td>${esc(periodeCourte(r.periode_debut, r.periode_fin))}</td>
@@ -292,14 +353,17 @@ function renderSynthese() {
                 <thead><tr>
                     <th scope="col">Réalisation</th>
                     <th scope="col">Période</th>
-                    ${comps.map(c => `<th scope="col" title="${esc(c.libelle)}">${esc(c.code)}</th>`).join('')}
+                    ${comps.map(c => `<th scope="col" title="${esc(c.libelle)}">
+                        <a href="#/competence/${esc(c.code)}" style="color:#fff;text-decoration:underline;">${esc(c.code)}</a>
+                    </th>`).join('')}
                 </tr></thead>
                 <tbody>${lignes}</tbody>
             </table>
             </div>
             <p class="legende">
-                <strong>Légende des compétences :</strong>
-                ${comps.map(c => `<span class="legende-item"><strong>${esc(c.code)}</strong> — ${esc(c.libelle)}</span>`).join('')}
+                <strong>Légende — clique pour ouvrir la fiche d'une compétence :</strong>
+                ${comps.map(c => `<a href="#/competence/${esc(c.code)}" class="legende-item">
+                    <strong>${esc(c.code)}</strong> — ${esc(c.libelle)}</a>`).join('')}
             </p>
             <div class="bloc__actions-edition" hidden>
                 <button type="button" class="btn btn--secondaire" onclick="window.print()" data-testid="print-synthese">
@@ -313,7 +377,7 @@ function renderSynthese() {
 function renderAttestations() {
     const s = App.data.sections.attestations;
     const att = App.data.attestations || {};
-    const blocAtt = (annee, lib) => {
+    const bloc = (annee, lib) => {
         const a = att[annee];
         return `
         <article class="attestation" data-testid="attestation-${annee}">
@@ -324,6 +388,8 @@ function renderAttestations() {
                 <p class="muted">${esc(periodeCourte(a.periode_debut, a.periode_fin))}</p>
                 ${a.fichier ? `<a class="btn btn--secondaire btn--petit" href="${esc(a.fichier)}" target="_blank" rel="noopener"
                    data-testid="att-link-${annee}">📄 Voir l'attestation</a>` : ''}
+                <button type="button" class="btn btn--petit btn--secondaire edit-only" hidden
+                        data-action="edit-attestation" data-annee="${annee}">✎ Modifier</button>
                 <button type="button" class="btn btn--petit btn--danger edit-only" hidden
                         data-action="delete-attestation" data-annee="${annee}"
                         data-testid="delete-att-${annee}">🗑 Supprimer</button>
@@ -344,18 +410,17 @@ function renderAttestations() {
                 <p>Attestations obligatoires pour le dossier E5 (1ère et 2ème année).</p>
             </header>
             <div class="attestations-grille" data-testid="attestations-list">
-                ${blocAtt('annee1', '1ère année')}
-                ${blocAtt('annee2', '2ème année')}
+                ${bloc('annee1', '1ère année')}${bloc('annee2', '2ème année')}
             </div>
             <p class="muted" style="margin-top:1.5rem;font-size:.85rem;">
-                💡 Astuce : place tes PDFs d'attestation dans le dossier <code>uploads/</code> du repo,
+                💡 Place les fichiers PDF/PNG/JPG dans le dossier <code>uploads/</code> du repo,
                 puis renseigne le chemin <code>uploads/attestation-stage1.pdf</code> dans le formulaire.
             </p>
         </div>
     </section>`;
 }
 
-function renderCompetences() {
+function renderListeCompetences() {
     const s = App.data.sections.competences;
     return `
     <section id="competences" class="bloc bloc--alt">
@@ -363,57 +428,191 @@ function renderCompetences() {
             <header class="bloc__entete">
                 <h2 data-edit="section" data-section="competences" data-champ="titre"
                     data-testid="competences-title">${esc(s.titre)}</h2>
-                <p>Référentiel officiel — sous-compétences et indicateurs de performance.</p>
+                <p data-edit="section" data-section="competences" data-champ="sous_titre">${esc(s.sous_titre)}</p>
             </header>
             <ul class="liste-competences" data-testid="competences-list">
-                ${App.data.competences.map(c => `
+                ${App.data.competences.map(c => {
+                    const nbReals = realisationsParCompetence(c.code).length;
+                    return `
                     <li class="competence-bloc">
                         <header class="competence-bloc__entete">
                             <span class="competence__code">${esc(c.code)}</span>
-                            <h3 class="competence__titre">${esc(c.libelle)}</h3>
+                            <div>
+                                <h3 class="competence__titre">
+                                    <a href="#/competence/${esc(c.code)}" data-testid="lien-detail-${esc(c.code)}">${esc(c.libelle)} →</a>
+                                </h3>
+                                ${c.reformulation ? `<p class="competence__reform"><em>${nl2br(c.reformulation)}</em></p>` : ''}
+                            </div>
+                            <span class="badge ${nbReals > 0 ? 'badge--ok' : ''}">${nbReals} réalisation${nbReals > 1 ? 's' : ''}</span>
                         </header>
-                        <details>
-                            <summary>Sous-compétences (${c.sous_competences.length})</summary>
-                            <ul class="sous-liste">
-                                ${c.sous_competences.map(x => `<li>${esc(x)}</li>`).join('')}
-                            </ul>
-                        </details>
-                        <details>
-                            <summary>Indicateurs de performance (${c.indicateurs.length})</summary>
-                            <ul class="sous-liste sous-liste--indic">
-                                ${c.indicateurs.map(x => `<li>${esc(x)}</li>`).join('')}
-                            </ul>
-                        </details>
-                    </li>
-                `).join('')}
+                        <ul class="sous-liste">
+                            ${c.sous_competences.map(x => `<li>${esc(x)}</li>`).join('')}
+                        </ul>
+                    </li>`;
+                }).join('')}
             </ul>
         </div>
     </section>`;
 }
 
-/** Assemble toutes les sections de la page. */
-function renderApp() {
-    const html = [
+function renderVeille() {
+    const s = App.data.sections.veille;
+    const sujets = s.sujets || [];
+    return `
+    <section id="veille" class="bloc">
+        <div class="conteneur">
+            <header class="bloc__entete">
+                <h2 data-edit="section" data-section="veille" data-champ="titre"
+                    data-testid="veille-title">${esc(s.titre)}</h2>
+                <p data-edit="section" data-section="veille" data-champ="sous_titre"
+                   data-testid="veille-subtitle">${esc(s.sous_titre)}</p>
+            </header>
+            <div class="prose" data-edit="section" data-section="veille" data-champ="texte_principal"
+                 data-testid="veille-content">${nl2br(s.texte_principal) || '<em style="color:#94a3b8">✍️ Décris ta méthode de veille (outils, fréquence, sources principales)</em>'}</div>
+
+            <h3 style="margin-top:2rem;font-family:var(--police-titre);">Mes sujets de veille</h3>
+            <div class="grille-veille" data-testid="veille-sujets">
+                ${sujets.length === 0
+                    ? '<p class="vide">Aucun sujet de veille pour le moment.</p>'
+                    : sujets.map((su, i) => `
+                    <article class="veille-sujet" data-testid="veille-sujet-${i}">
+                        <h4>${esc(su.titre)}</h4>
+                        ${su.description ? `<p>${nl2br(su.description)}</p>` : ''}
+                        ${su.sources?.length ? `
+                            <p class="muted"><strong>Sources :</strong></p>
+                            <ul class="sources-liste">
+                                ${su.sources.map(s => `<li><a href="${esc(s.url || '#')}" target="_blank" rel="noopener">${esc(s.titre || s.url)}</a></li>`).join('')}
+                            </ul>` : ''}
+                        ${su.synthese ? `<details><summary>📝 Synthèse</summary><p>${nl2br(su.synthese)}</p></details>` : ''}
+                        <div class="carte__actions">
+                            <button type="button" class="btn btn--petit btn--secondaire edit-only" hidden
+                                    data-action="edit-veille-sujet" data-index="${i}">✎ Modifier</button>
+                            <button type="button" class="btn btn--petit btn--danger edit-only" hidden
+                                    data-action="delete-veille-sujet" data-index="${i}">🗑</button>
+                        </div>
+                    </article>`).join('')}
+            </div>
+            <div class="bloc__actions-edition" hidden>
+                <button type="button" class="btn btn--primaire" data-action="add-veille-sujet"
+                        data-testid="add-veille-sujet">＋ Ajouter un sujet de veille</button>
+            </div>
+        </div>
+    </section>`;
+}
+
+// =============================================================================
+// PAGE DÉDIÉE D'UNE COMPÉTENCE (route #/competence/Cx.y)
+// =============================================================================
+function renderPageCompetence(code) {
+    const c = App.data.competences.find(x => x.code === code);
+    if (!c) return `<section class="bloc"><div class="conteneur">
+        <p>Compétence inconnue : ${esc(code)}.</p>
+        <a class="btn btn--secondaire" href="#/">← Retour</a>
+    </div></section>`;
+
+    const reals = realisationsParCompetence(code);
+
+    return `
+    <section class="bloc bloc--competence" data-testid="page-competence-${esc(code)}">
+        <div class="conteneur">
+            <a class="lien-retour" href="#/" data-testid="lien-retour">← Retour au portfolio</a>
+
+            <header class="competence-page__header">
+                <span class="competence__code competence__code--big">${esc(c.code)}</span>
+                <div>
+                    <h1 class="competence-page__titre" data-testid="competence-titre">${esc(c.libelle)}</h1>
+                    <p class="competence-page__sous-titre">Compétence du Bloc 1 — Épreuve E5</p>
+                </div>
+            </header>
+
+            <article class="competence-page__bloc">
+                <h2>📝 Ma reformulation personnelle</h2>
+                <p class="muted" style="font-size:.9rem;">Explique cette compétence avec TES mots, dans le contexte de TES réalisations (c'est ce que le jury veut entendre).</p>
+                <div class="prose competence-page__reform" data-edit="competence-reform" data-code="${esc(c.code)}"
+                     data-testid="competence-reformulation">
+                    ${c.reformulation ? nl2br(c.reformulation) : '<em style="color:#94a3b8">✍️ En mode édition, clique ici pour reformuler la compétence avec tes propres mots.</em>'}
+                </div>
+            </article>
+
+            <article class="competence-page__bloc">
+                <h2>🎯 Sous-compétences (référentiel officiel)</h2>
+                <p class="muted" style="font-size:.9rem;">Voici ce que tu dois savoir faire pour valider cette compétence.</p>
+                <ul class="sous-liste sous-liste--visible">
+                    ${c.sous_competences.map(x => `<li>${esc(x)}</li>`).join('')}
+                </ul>
+            </article>
+
+            <article class="competence-page__bloc">
+                <h2>📊 Indicateurs de performance (critères du jury)</h2>
+                <ul class="sous-liste sous-liste--indic sous-liste--visible">
+                    ${c.indicateurs.map(x => `<li>${esc(x)}</li>`).join('')}
+                </ul>
+            </article>
+
+            <article class="competence-page__bloc">
+                <h2>🚀 Mes réalisations qui mobilisent cette compétence
+                    <span class="badge ${reals.length > 0 ? 'badge--ok' : ''}">${reals.length}</span>
+                </h2>
+                ${reals.length === 0 ? '<p class="vide">Aucune réalisation ne mobilise encore cette compétence. Ajoutes-en une et lie-la à cette compétence !</p>' : ''}
+                <div class="grille-cartes" data-testid="reals-de-competence">
+                    ${reals.map(r => {
+                        const justif = r.competences.find(x => x.code === code)?.justification || '';
+                        return `
+                        <article class="carte" data-realisation-id="${esc(r.id)}">
+                            <header class="carte__entete">
+                                <h4 class="carte__titre">${esc(r.titre)}</h4>
+                                <span class="puce">${esc(LIBELLES_CAT[r.categorie] || r.categorie)}</span>
+                            </header>
+                            <p class="carte__date">${esc(periodeCourte(r.periode_debut, r.periode_fin))}</p>
+                            ${justif ? `<div class="carte__contrib"><strong>Comment ${esc(code)} a été mobilisée :</strong> ${nl2br(justif)}</div>` : '<p class="muted"><em>Pas encore de justification — ajoutes-en une via le formulaire de la réalisation.</em></p>'}
+                            <p><a href="#realisations" class="btn btn--petit btn--secondaire">Voir la réalisation complète</a></p>
+                        </article>`;
+                    }).join('')}
+                </div>
+            </article>
+        </div>
+    </section>`;
+}
+
+// =============================================================================
+// ASSEMBLAGE ET ROUTEUR
+// =============================================================================
+function renderHome() {
+    return [
         renderHero(),
+        renderStats(),
         renderProfil(),
         renderSectionTexte('apropos', 'apropos', 'Décrivez votre parcours de professionnalisation.'),
         renderRealisations(),
         renderSynthese(),
         renderAttestations(),
-        renderCompetences(),
-        renderSectionTexte('veille', 'veille', 'Présentez vos sujets de veille (C1.6).'),
+        renderListeCompetences(),
+        renderVeille(),
         renderSectionTexte('contact', 'contact', 'Email, LinkedIn, GitHub…'),
     ].join('');
-    document.getElementById('appRoot').innerHTML = html;
-    // Réappliquer le mode édition après re-render
-    document.querySelectorAll('.bloc__actions-edition').forEach(el => { el.hidden = !App.modeEdition; });
-    document.querySelectorAll('.edit-only').forEach(el => { el.hidden = !App.modeEdition; });
 }
 
-// ---------------------------------------------------------------------------
-// 5) CONTRÔLEURS (mode édition + édition de chaque entité)
-// ---------------------------------------------------------------------------
+function renderApp() {
+    const hash = window.location.hash || '#/';
+    let html;
+    const matchComp = hash.match(/^#\/competence\/(C\d\.\d)$/);
+    if (matchComp) {
+        html = renderPageCompetence(matchComp[1]);
+        document.querySelector('.entete__nav')?.classList.add('entete__nav--mince');
+    } else {
+        html = renderHome();
+        document.querySelector('.entete__nav')?.classList.remove('entete__nav--mince');
+    }
+    document.getElementById('appRoot').innerHTML = html;
+    document.querySelectorAll('.bloc__actions-edition').forEach(el => { el.hidden = !App.modeEdition; });
+    document.querySelectorAll('.edit-only').forEach(el => { el.hidden = !App.modeEdition; });
+    // Si on est sur une page compétence, on remonte en haut
+    if (matchComp) window.scrollTo({ top: 0, behavior: 'instant' });
+}
 
+// =============================================================================
+// MODE ÉDITION + PANNEAU LATÉRAL
+// =============================================================================
 function basculerModeEdition() {
     App.modeEdition = !App.modeEdition;
     document.body.classList.toggle('mode-edition', App.modeEdition);
@@ -441,54 +640,51 @@ function fermerPanneau() {
     document.getElementById('overlayPanneau').hidden = true;
 }
 
-/** Petit helper : bouton "Enregistrer" + "Annuler" pour les panneaux. */
-function actionsPanneau(onSave, testidSave = 'save-btn') {
+function actionsPanneau(onSave, testidSave = 'save-btn', extra = null) {
     return h('div', { class: 'actions', style: 'border-top:1px solid var(--c-bord);padding-top:1rem;' },
         h('button', { class: 'btn btn--primaire', type: 'button', 'data-testid': testidSave,
-            onclick: () => { onSave(); sauverLocal(); renderApp(); fermerPanneau(); toast('Modifications enregistrées localement', 'succes'); }
+            onclick: () => {
+                try { onSave(); }
+                catch (e) { toast('Erreur : ' + e.message, 'erreur'); return; }
+                sauverLocal(); renderApp(); fermerPanneau();
+                toast('Enregistré localement — n\'oublie pas d\'exporter !', 'succes');
+            }
         }, 'Enregistrer'),
+        extra,
         h('button', { class: 'btn btn--secondaire', type: 'button', onclick: fermerPanneau }, 'Annuler'),
     );
 }
 
-function editerSection(code, champ) {
+function editerSection(code) {
     const s = App.data.sections[code];
     if (!s) return;
-    const inputs = {
-        titre:           () => h('input', { type: 'text', id: 'f_titre', value: s.titre || '', 'data-testid': 'edit-section-titre-input' }),
-        sous_titre:      () => h('input', { type: 'text', id: 'f_sous',  value: s.sous_titre || '', 'data-testid': 'edit-section-soustitre-input' }),
-        texte_principal: () => h('textarea', { id: 'f_txt', rows: 8, 'data-testid': 'edit-contenu-textarea' }, s.texte_principal || ''),
-    };
-    // On ouvre un panneau qui édite tous les champs présents pour la section
+    const refs = {};
     const corps = [];
-    for (const c of ['titre','sous_titre','texte_principal']) {
+    const labels = { titre: 'Titre', sous_titre: 'Sous-titre', texte_principal: 'Contenu' };
+    for (const c of ['titre', 'sous_titre', 'texte_principal']) {
         if (s[c] === undefined) continue;
-        const labels = { titre: 'Titre', sous_titre: 'Sous-titre', texte_principal: 'Contenu' };
         corps.push(h('label', { for: 'f_' + c }, labels[c]));
-        corps.push(inputs[c]());
+        if (c === 'texte_principal') {
+            const ta = h('textarea', { id: 'f_' + c, rows: 8 }, s[c] || '');
+            refs[c] = ta; corps.push(ta);
+        } else {
+            const inp = h('input', { type: 'text', id: 'f_' + c, value: s[c] || '' });
+            refs[c] = inp; corps.push(inp);
+        }
     }
-    corps.push(actionsPanneau(() => {
-        if (s.titre !== undefined)           s.titre = document.getElementById('f_titre').value;
-        if (s.sous_titre !== undefined)      s.sous_titre = document.getElementById('f_sous').value;
-        if (s.texte_principal !== undefined) s.texte_principal = document.getElementById('f_txt').value;
-    }, 'save-section-btn'));
-
+    corps.push(actionsPanneau(() => { for (const k in refs) s[k] = refs[k].value; }, 'save-section-btn'));
     ouvrirPanneau('Modifier la section', corps);
-    setTimeout(() => document.getElementById('f_titre')?.focus(), 50);
+    setTimeout(() => corps[1]?.focus?.(), 50);
 }
 
 function editerProfil() {
     const p = App.data.profil;
     const champs = [
-        ['nom', 'NOM', 'text'],
-        ['prenom', 'Prénom', 'text'],
-        ['numero_candidat', 'N° candidat', 'text'],
-        ['session', 'SESSION', 'text'],
-        ['option_sio', 'Option BTS SIO', 'select'],
-        ['etablissement', 'Établissement', 'text'],
+        ['nom', 'NOM', 'text'], ['prenom', 'Prénom', 'text'],
+        ['numero_candidat', 'N° candidat', 'text'], ['session', 'SESSION', 'text'],
+        ['option_sio', 'Option BTS SIO', 'select'], ['etablissement', 'Établissement', 'text'],
     ];
-    const refs = {};
-    const corps = [];
+    const refs = {}; const corps = [];
     for (const [key, lab, type] of champs) {
         corps.push(h('label', { for: 'p_' + key }, lab));
         if (type === 'select') {
@@ -498,18 +694,28 @@ function editerProfil() {
                 h('option', { value: 'SLAM' }, 'SLAM'),
             );
             sel.value = p[key] || '';
-            corps.push(sel);
-            refs[key] = sel;
+            corps.push(sel); refs[key] = sel;
         } else {
             const inp = h('input', { type, id: 'p_' + key, value: p[key] || '', 'data-testid': 'edit-profil-' + key });
-            corps.push(inp);
-            refs[key] = inp;
+            corps.push(inp); refs[key] = inp;
         }
     }
-    corps.push(actionsPanneau(() => {
-        for (const [key] of champs) p[key] = refs[key].value;
-    }, 'save-profil-btn'));
+    corps.push(actionsPanneau(() => { for (const [k] of champs) p[k] = refs[k].value; }, 'save-profil-btn'));
     ouvrirPanneau('Identification du candidat (E5)', corps);
+}
+
+function editerCompetenceReform(code) {
+    const c = App.data.competences.find(x => x.code === code);
+    if (!c) return;
+    const ta = h('textarea', { id: 'cr', rows: 6 }, c.reformulation || '');
+    ouvrirPanneau(`Reformuler ${code}`, [
+        h('p', { style: 'color:#64748b;font-size:.9rem;' },
+            `Compétence officielle : "${c.libelle}". Reformule en TES mots, dans le contexte de TES réalisations. Exemple : "Pour moi, ${c.code} a consisté à ..."`),
+        h('label', { for: 'cr' }, 'Reformulation personnelle'),
+        ta,
+        actionsPanneau(() => { c.reformulation = ta.value; }, 'save-reform-btn'),
+    ]);
+    setTimeout(() => ta.focus(), 50);
 }
 
 function editerRealisation(idOrNew) {
@@ -518,8 +724,7 @@ function editerRealisation(idOrNew) {
         ? { id: Date.now(), titre: 'Nouvelle réalisation', categorie: 'formation', competences: [], preuves: [] }
         : (App.data.realisations || []).find(r => String(r.id) === String(idOrNew));
     if (!real) { toast('Réalisation introuvable', 'erreur'); return; }
-    if (!real.competences) real.competences = [];
-    if (!real.preuves) real.preuves = [];
+    real.competences ??= []; real.preuves ??= [];
 
     const refs = {
         titre:        h('input', { type: 'text', id: 'r_t', value: real.titre || '', 'data-testid': 'edit-real-titre' }),
@@ -528,30 +733,35 @@ function editerRealisation(idOrNew) {
         periode_debut: h('input', { type: 'date', id: 'r_pd', value: real.periode_debut || '' }),
         periode_fin:   h('input', { type: 'date', id: 'r_pf', value: real.periode_fin || '' }),
         contexte:     h('textarea', { id: 'r_ctx', rows: 2 }, real.contexte || ''),
-        description:  h('textarea', { id: 'r_desc', rows: 4 }, real.description || ''),
+        objectifs:    h('textarea', { id: 'r_obj', rows: 2 }, real.objectifs || ''),
+        demarche:     h('textarea', { id: 'r_dem', rows: 3 }, real.demarche || ''),
+        description:  h('textarea', { id: 'r_desc', rows: 3 }, real.description || ''),
         contribution: h('textarea', { id: 'r_ctb', rows: 3, 'data-testid': 'edit-real-contribution' }, real.contribution_personnelle || ''),
+        resultats:    h('textarea', { id: 'r_res', rows: 2 }, real.resultats || ''),
+        bilan:        h('textarea', { id: 'r_bil', rows: 2 }, real.bilan || ''),
         travail_equipe: h('input', { type: 'checkbox', id: 'r_eq', ...(real.travail_equipe ? { checked: '' } : {}) }),
         technologies: h('input', { type: 'text', id: 'r_tec', value: real.technologies || '' }),
         lien:         h('input', { type: 'url',  id: 'r_lien', value: real.lien || '' }),
     };
     refs.categorie.value = real.categorie || 'formation';
 
-    // Compétences associées
     const compsContainer = h('div', { class: 'competences-liste' });
     function refreshComps() {
         compsContainer.replaceChildren();
         if (!real.competences.length) compsContainer.append(h('p', {}, 'Aucune compétence associée.'));
         for (const c of real.competences) {
             const comp = App.data.competences.find(x => x.code === c.code);
-            compsContainer.append(h('div', { class: 'competence-item' },
-                h('div', {},
-                    h('strong', {}, c.code + ' '),
-                    comp?.libelle || '',
-                    c.justification ? h('div', { style: 'font-size:.85rem;color:#666;' }, c.justification) : null,
+            const justifInput = h('input', { type: 'text', value: c.justification || '',
+                placeholder: 'Justification (pour l\'oral E5)', style: 'flex:1;',
+                oninput: (e) => { c.justification = e.target.value; } });
+            compsContainer.append(h('div', { class: 'competence-item', style: 'flex-direction:column;align-items:stretch;gap:.35rem;' },
+                h('div', { style: 'display:flex;justify-content:space-between;align-items:center;' },
+                    h('strong', {}, `${c.code} — ${comp?.libelle || ''}`),
+                    h('button', { class: 'btn btn--petit btn--danger', type: 'button',
+                        onclick: () => { real.competences = real.competences.filter(x => x.code !== c.code); refreshComps(); }
+                    }, '×'),
                 ),
-                h('button', { class: 'btn btn--petit btn--danger', type: 'button',
-                    onclick: () => { real.competences = real.competences.filter(x => x.code !== c.code); refreshComps(); }
-                }, '×'),
+                justifInput,
             ));
         }
     }
@@ -561,9 +771,8 @@ function editerRealisation(idOrNew) {
         h('option', { value: '' }, '— Choisir une compétence —'),
         ...App.data.competences.map(c => h('option', { value: c.code }, `${c.code} — ${c.libelle}`))
     );
-    const justifComp = h('input', { type: 'text', placeholder: "Justification (pour l'oral E5)" });
+    const justifComp = h('input', { type: 'text', placeholder: 'Justification (pour l\'oral E5)' });
 
-    // Preuves (chemin de fichier)
     const preuvesContainer = h('div', { class: 'preuves-liste' });
     function refreshPreuves() {
         preuvesContainer.replaceChildren();
@@ -588,9 +797,13 @@ function editerRealisation(idOrNew) {
             h('div', {}, h('label', { for: 'r_pd' }, 'Période — début'), refs.periode_debut),
             h('div', {}, h('label', { for: 'r_pf' }, 'Période — fin'),   refs.periode_fin),
         ),
-        h('label', { for: 'r_ctx' }, 'Contexte'), refs.contexte,
-        h('label', { for: 'r_desc' }, 'Description'), refs.description,
-        h('label', { for: 'r_ctb' }, 'Ma contribution personnelle (critère officiel E5)'), refs.contribution,
+        h('label', { for: 'r_ctx' }, 'Contexte (où, quand, pour qui ?)'), refs.contexte,
+        h('label', { for: 'r_obj' }, 'Objectifs (quel besoin / problème ?)'), refs.objectifs,
+        h('label', { for: 'r_dem' }, 'Démarche (étapes suivies)'), refs.demarche,
+        h('label', { for: 'r_desc' }, 'Description technique'), refs.description,
+        h('label', { for: 'r_ctb' }, '⭐ Ma contribution personnelle (critère officiel E5)'), refs.contribution,
+        h('label', { for: 'r_res' }, 'Résultats obtenus (concrets / mesurables)'), refs.resultats,
+        h('label', { for: 'r_bil' }, 'Bilan personnel (ce que j\'ai appris)'), refs.bilan,
         h('label', { for: 'r_eq', style: 'display:flex;gap:.5rem;align-items:center;' },
             refs.travail_equipe, ' Réalisation en équipe projet'),
         h('label', { for: 'r_tec' }, 'Technologies / outils'), refs.technologies,
@@ -626,35 +839,30 @@ function editerRealisation(idOrNew) {
             }
         }, '＋ Ajouter cette preuve'),
 
-        h('div', { class: 'actions', style: 'border-top:1px solid var(--c-bord);padding-top:1rem;' },
-            h('button', { class: 'btn btn--primaire', type: 'button', 'data-testid': 'save-real-btn',
-                onclick: () => {
-                    real.titre = refs.titre.value;
-                    real.categorie = refs.categorie.value;
-                    real.periode_debut = refs.periode_debut.value || null;
-                    real.periode_fin = refs.periode_fin.value || null;
-                    real.contexte = refs.contexte.value;
-                    real.description = refs.description.value;
-                    real.contribution_personnelle = refs.contribution.value;
-                    real.travail_equipe = refs.travail_equipe.checked;
-                    real.technologies = refs.technologies.value;
-                    real.lien = refs.lien.value;
-                    if (isNew) App.data.realisations.push(real);
-                    sauverLocal(); renderApp(); fermerPanneau();
-                    toast('Réalisation enregistrée', 'succes');
-                }
-            }, 'Enregistrer'),
-            !isNew && h('button', {
-                class: 'btn btn--danger', type: 'button', 'data-testid': 'delete-real-btn',
-                onclick: () => {
-                    if (!confirm('Supprimer cette réalisation ?')) return;
-                    App.data.realisations = App.data.realisations.filter(r => r.id !== real.id);
-                    sauverLocal(); renderApp(); fermerPanneau();
-                    toast('Supprimée');
-                }
-            }, '🗑 Supprimer'),
-            h('button', { class: 'btn btn--secondaire', type: 'button', onclick: fermerPanneau }, 'Fermer'),
-        )
+        actionsPanneau(() => {
+            real.titre = refs.titre.value;
+            real.categorie = refs.categorie.value;
+            real.periode_debut = refs.periode_debut.value || null;
+            real.periode_fin = refs.periode_fin.value || null;
+            real.contexte = refs.contexte.value;
+            real.objectifs = refs.objectifs.value;
+            real.demarche = refs.demarche.value;
+            real.description = refs.description.value;
+            real.contribution_personnelle = refs.contribution.value;
+            real.resultats = refs.resultats.value;
+            real.bilan = refs.bilan.value;
+            real.travail_equipe = refs.travail_equipe.checked;
+            real.technologies = refs.technologies.value;
+            real.lien = refs.lien.value;
+            if (isNew) App.data.realisations.push(real);
+        }, 'save-real-btn',
+        !isNew && h('button', { class: 'btn btn--danger', type: 'button', 'data-testid': 'delete-real-btn',
+            onclick: () => {
+                if (!confirm('Supprimer cette réalisation ?')) return;
+                App.data.realisations = App.data.realisations.filter(r => r.id !== real.id);
+                sauverLocal(); renderApp(); fermerPanneau(); toast('Supprimée');
+            }
+        }, '🗑 Supprimer')),
     ];
     ouvrirPanneau(isNew ? 'Nouvelle réalisation' : 'Modifier la réalisation', corps);
 }
@@ -676,26 +884,72 @@ function editerAttestation(annee) {
             h('div', {}, h('label', { for: 'a_pf' }, 'Fin'),   r.fin),
         ),
         h('label', { for: 'a_f' }, 'Chemin du fichier (PDF/PNG/JPG dans uploads/)'), r.fichier,
-        h('div', { class: 'actions' },
-            h('button', { class: 'btn btn--primaire', type: 'button', 'data-testid': `save-att-${annee}`,
-                onclick: () => {
-                    App.data.attestations[annee] = {
-                        titre: r.titre.value, organisme: r.organisme.value,
-                        periode_debut: r.debut.value || null, periode_fin: r.fin.value || null,
-                        fichier: r.fichier.value,
-                    };
-                    sauverLocal(); renderApp(); fermerPanneau();
-                    toast('Attestation enregistrée', 'succes');
-                }
-            }, 'Enregistrer'),
-            h('button', { class: 'btn btn--secondaire', type: 'button', onclick: fermerPanneau }, 'Annuler'),
-        )
+        actionsPanneau(() => {
+            App.data.attestations[annee] = {
+                titre: r.titre.value, organisme: r.organisme.value,
+                periode_debut: r.debut.value || null, periode_fin: r.fin.value || null,
+                fichier: r.fichier.value,
+            };
+        }, `save-att-${annee}`),
     ]);
 }
 
-// ---------------------------------------------------------------------------
-// 6) EXPORT / IMPORT JSON (pour committer sur GitHub)
-// ---------------------------------------------------------------------------
+function editerVeilleSujet(indexOrNew) {
+    const isNew = indexOrNew === '__new__';
+    const sujets = App.data.sections.veille.sujets ??= [];
+    const sujet = isNew ? { titre: '', description: '', sources: [], synthese: '' } : sujets[indexOrNew];
+    if (!sujet) return;
+    sujet.sources ??= [];
+
+    const titre       = h('input', { type: 'text', id: 'v_t', value: sujet.titre, placeholder: 'Ex: Sécurité du Cloud, IA générative…' });
+    const description = h('textarea', { id: 'v_d', rows: 2 }, sujet.description || '');
+    const synthese    = h('textarea', { id: 'v_s', rows: 5 }, sujet.synthese || '');
+
+    const sourcesContainer = h('div', { class: 'preuves-liste' });
+    function refreshSources() {
+        sourcesContainer.replaceChildren();
+        if (!sujet.sources.length) sourcesContainer.append(h('p', {}, 'Aucune source.'));
+        for (const s of sujet.sources) {
+            sourcesContainer.append(h('div', { class: 'preuve-item' },
+                h('span', {}, `${s.titre || ''} — ${s.url || ''}`),
+                h('button', { class: 'btn btn--petit btn--danger', type: 'button',
+                    onclick: () => { sujet.sources = sujet.sources.filter(x => x !== s); refreshSources(); }
+                }, '×'),
+            ));
+        }
+    }
+    refreshSources();
+    const srcTitre = h('input', { type: 'text', placeholder: 'Titre de la source' });
+    const srcUrl   = h('input', { type: 'url',  placeholder: 'https://…' });
+
+    ouvrirPanneau(isNew ? 'Nouveau sujet de veille' : 'Modifier le sujet', [
+        h('label', { for: 'v_t' }, 'Titre du sujet'), titre,
+        h('label', { for: 'v_d' }, 'Description rapide'), description,
+        h('h3', { style: 'margin:1rem 0 .5rem;font-family:var(--police-titre);' }, 'Sources'),
+        sourcesContainer,
+        srcTitre, srcUrl,
+        h('button', {
+            class: 'btn btn--secondaire btn--petit', type: 'button', style: 'margin-bottom:1rem;',
+            onclick: () => {
+                if (!srcUrl.value && !srcTitre.value) return;
+                sujet.sources.push({ titre: srcTitre.value, url: srcUrl.value });
+                refreshSources();
+                srcTitre.value = ''; srcUrl.value = '';
+            }
+        }, '＋ Ajouter une source'),
+        h('label', { for: 'v_s' }, 'Synthèse / ce que tu en retires'), synthese,
+        actionsPanneau(() => {
+            sujet.titre = titre.value;
+            sujet.description = description.value;
+            sujet.synthese = synthese.value;
+            if (isNew) sujets.push(sujet);
+        }, 'save-veille-btn'),
+    ]);
+}
+
+// =============================================================================
+// EXPORT / IMPORT JSON
+// =============================================================================
 function exporterJSON() {
     const blob = new Blob([JSON.stringify(App.data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -703,9 +957,8 @@ function exporterJSON() {
     a.href = url; a.download = 'portfolio.json';
     document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
-    toast('Fichier portfolio.json téléchargé. Place-le dans /data/ et fais un git commit + push.', 'succes');
+    toast('portfolio.json téléchargé. Place-le dans /data/ et git push !', 'succes');
 }
-
 function importerJSON(file) {
     const reader = new FileReader();
     reader.onload = () => {
@@ -717,16 +970,15 @@ function importerJSON(file) {
     };
     reader.readAsText(file);
 }
-
 function reinitialiser() {
     if (!confirm('Effacer toutes les modifications locales et recharger le JSON officiel ?')) return;
     localStorage.removeItem(App.LS_KEY);
     location.reload();
 }
 
-// ---------------------------------------------------------------------------
-// 7) DÉMARRAGE
-// ---------------------------------------------------------------------------
+// =============================================================================
+// DÉMARRAGE
+// =============================================================================
 async function init() {
     document.getElementById('annee').textContent = new Date().getFullYear();
     try {
@@ -748,38 +1000,47 @@ async function init() {
         if (e.target.files[0]) importerJSON(e.target.files[0]);
     });
 
+    window.addEventListener('hashchange', renderApp);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fermerPanneau(); });
 
-    // Délégation des clics sur les éléments éditables
     document.addEventListener('click', (e) => {
-        // Actions hors mode édition d'abord (rien ici), puis actions data-action
+        // Actions globales (data-action) en mode édition
         const act = e.target.closest('[data-action]');
         if (act && App.modeEdition) {
             e.preventDefault();
-            if (act.dataset.action === 'edit-attestation')   editerAttestation(act.dataset.annee);
-            if (act.dataset.action === 'delete-attestation') {
+            const a = act.dataset.action;
+            if (a === 'edit-attestation')   editerAttestation(act.dataset.annee);
+            if (a === 'delete-attestation') {
                 if (confirm('Supprimer cette attestation ?')) {
                     App.data.attestations[act.dataset.annee] = null;
                     sauverLocal(); renderApp(); toast('Supprimée');
+                }
+            }
+            if (a === 'add-veille-sujet')    editerVeilleSujet('__new__');
+            if (a === 'edit-veille-sujet')   editerVeilleSujet(Number(act.dataset.index));
+            if (a === 'delete-veille-sujet') {
+                if (confirm('Supprimer ce sujet de veille ?')) {
+                    App.data.sections.veille.sujets.splice(Number(act.dataset.index), 1);
+                    sauverLocal(); renderApp(); toast('Supprimé');
                 }
             }
             return;
         }
         // Bouton "Ajouter une réalisation"
         if (e.target.closest('#btnAjouterRealisation') && App.modeEdition) {
-            e.preventDefault();
-            editerRealisation('__new__');
-            return;
+            e.preventDefault(); editerRealisation('__new__'); return;
         }
-
         if (!App.modeEdition) return;
         const cible = e.target.closest('[data-edit]');
         if (!cible) return;
+        // Ne pas hijacker les liens vers les pages compétences
+        if (e.target.closest('a[href^="#/competence/"]')) return;
         e.preventDefault();
         const type = cible.dataset.edit;
-        if (type === 'section')      editerSection(cible.dataset.section, cible.dataset.champ);
+        if (type === 'section')      editerSection(cible.dataset.section);
         else if (type === 'profil')  editerProfil();
-        else if (type === 'realisation') editerRealisation(cible.dataset.realisationId);
+        else if (type === 'realisation')        editerRealisation(cible.dataset.realisationId);
+        else if (type === 'competence-reform')  editerCompetenceReform(cible.dataset.code);
     });
 }
 

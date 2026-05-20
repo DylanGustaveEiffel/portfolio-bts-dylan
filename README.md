@@ -7,11 +7,19 @@ Portfolio numérique conforme à l'épreuve **E5** du BTS SIO (référentiel off
 - 🎨 Design **moderne, clair, responsive** (mobile / tablette / PC)
 - ♿ **Accessibilité WCAG AA** : lien d'évitement, focus visible, navigation clavier, `aria-label`
 - ✏️ **Mode édition** intégré : modifie tout depuis le site, sans toucher au code
+- 📊 **Statistiques dynamiques** : compteurs calculés à partir des données (exploite C1.3)
+- 🔗 **Pages dédiées par compétence** (`#/competence/C1.1`) avec :
+  - Reformulation personnelle (en TES mots)
+  - Sous-compétences officielles affichées
+  - Indicateurs de performance officiels
+  - Liste filtrée des réalisations qui la mobilisent (+ justification)
 - 📊 **Tableau de synthèse officiel** (matrice compétences × réalisations, imprimable)
-- 📁 **Catégorisation E5** des réalisations : Formation / Pro 1ère année / Pro 2ème année
-- 🎯 **Contribution personnelle** + **travail en équipe** (critères officiels)
+- 📁 **Catégorisation E5** : Formation / Pro 1ère année / Pro 2ème année
+- 🎯 Champs détaillés par réalisation : **Contexte**, **Objectifs**, **Démarche**,
+  **Description**, **Contribution personnelle** (critère officiel), **Résultats**, **Bilan**, technologies
 - 📜 **Attestations de stage** (1ère et 2ème année)
 - 🧠 Référentiel détaillé : **22 sous-compétences** + **38 indicateurs de performance** officiels
+- 📚 **Veille technologique structurée** : sujets avec sources et synthèses (C1.6)
 - 🚀 **Déploiement automatique** sur GitHub Pages (URL publique gratuite)
 - 🛠️ Version PHP/MVC complète dans `/php-mvc/` (pour la démo MVC à l'oral, via XAMPP)
 
