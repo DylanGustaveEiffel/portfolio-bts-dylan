@@ -1,0 +1,163 @@
+{
+  "profil": {
+    "nom": "",
+    "prenom": "",
+    "numero_candidat": "",
+    "session": "",
+    "option_sio": "",
+    "etablissement": ""
+  },
+  "sections": {
+    "hero": {
+      "titre": "Votre nom ici",
+      "sous_titre": "Étudiant·e en BTS SIO — option SLAM/SISR",
+      "texte_principal": ""
+    },
+    "apropos": {
+      "titre": "À propos",
+      "sous_titre": "Mon parcours de professionnalisation",
+      "texte_principal": ""
+    },
+    "realisations": {
+      "titre": "Mes réalisations",
+      "sous_titre": "Projets, missions, stages"
+    },
+    "synthese": {
+      "titre": "Tableau de synthèse",
+      "sous_titre": "Compétences mobilisées par réalisation (officiel E5)"
+    },
+    "attestations": {
+      "titre": "Attestations de stage",
+      "sous_titre": "Stages de 1ère et 2ème année"
+    },
+    "competences": {
+      "titre": "Compétences Bloc 1",
+      "sous_titre": "Référentiel officiel — sous-compétences et indicateurs"
+    },
+    "veille": {
+      "titre": "Veille technologique",
+      "sous_titre": "Sujets suivis, sources, synthèses",
+      "texte_principal": ""
+    },
+    "contact": {
+      "titre": "Contact",
+      "sous_titre": "Comment me joindre",
+      "texte_principal": ""
+    }
+  },
+  "realisations": [],
+  "attestations": {
+    "annee1": null,
+    "annee2": null
+  },
+  "competences": [
+    {
+      "code": "C1.1",
+      "libelle": "Gérer le patrimoine informatique",
+      "sous_competences": [
+        "Recenser et identifier les ressources numériques",
+        "Exploiter des référentiels, normes et standards adoptés par le prestataire informatique",
+        "Mettre en place et vérifier les niveaux d'habilitation associés à un service",
+        "Vérifier les conditions de la continuité d'un service informatique",
+        "Gérer des sauvegardes",
+        "Vérifier le respect des règles d'utilisation des ressources numériques"
+      ],
+      "indicateurs": [
+        "Le recensement du patrimoine informatique est exhaustif et réalisé au moyen d'un outil de gestion",
+        "Les référentiels, normes et standards sont mobilisés de façon pertinente",
+        "Les droits mis en place correspondent aux habilitations des acteurs",
+        "Les conditions de continuité et de reprise d'un service sont vérifiées et les manquements sont signalés",
+        "Les sauvegardes sont réalisées dans les conditions prévues conformément au plan de sauvegarde",
+        "Les restaurations sont testées et opérationnelles",
+        "Les écarts par rapport aux règles d'utilisation des ressources numériques sont détectés et signalés"
+      ]
+    },
+    {
+      "code": "C1.2",
+      "libelle": "Répondre aux incidents et aux demandes d'assistance et d'évolution",
+      "sous_competences": [
+        "Collecter, suivre et orienter des demandes",
+        "Traiter des demandes concernant les services réseau et système",
+        "Traiter des demandes concernant les applications"
+      ],
+      "indicateurs": [
+        "Les demandes d'assistance ont été prises en compte, correctement diagnostiquées et leur traitement correspond aux attentes",
+        "La réponse à une demande d'assistance est conforme à la procédure et adaptée à l'utilisateur",
+        "La méthode de diagnostic de résolution d'un incident est adéquate et efficiente",
+        "Une solution à l'incident est trouvée et mise en œuvre",
+        "Le cycle de résolution des demandes respecte les normes et standards du prestataire informatique",
+        "L'utilisation d'un logiciel de gestion de parc et d'incidents est maîtrisée",
+        "Le compte rendu d'intervention est clair et explicite",
+        "La communication écrite et orale est adaptée à l'interlocuteur"
+      ]
+    },
+    {
+      "code": "C1.3",
+      "libelle": "Développer la présence en ligne de l'organisation",
+      "sous_competences": [
+        "Participer à la valorisation de l'image de l'organisation sur les médias numériques en tenant compte du cadre juridique et des enjeux économiques",
+        "Référencer les services en ligne de l'organisation et mesurer leur visibilité",
+        "Participer à l'évolution d'un site Web exploitant les données de l'organisation"
+      ],
+      "indicateurs": [
+        "L'image de l'organisation est conforme aux attentes et valorisée",
+        "Les enjeux économiques liés à l'image de l'organisation sont identifiés et les obligations juridiques sont respectées",
+        "Les mentions légales sont accessibles et conformes à la législation",
+        "La visibilité des services en ligne de l'organisation est satisfaisante",
+        "Le site Web a évolué conformément au besoin exprimé"
+      ]
+    },
+    {
+      "code": "C1.4",
+      "libelle": "Travailler en mode projet",
+      "sous_competences": [
+        "Analyser les objectifs et les modalités d'organisation d'un projet",
+        "Planifier les activités",
+        "Évaluer les indicateurs de suivi d'un projet et analyser les écarts"
+      ],
+      "indicateurs": [
+        "Les objectifs et les modalités d'organisation du projet sont explicités",
+        "L'analyse des besoins et de l'existant est pertinente",
+        "Les activités personnelles sont planifiées selon une méthodologie donnée et les ressources sont mobilisées de manière efficace et pertinente",
+        "Le découpage en tâches est réaliste",
+        "Les livrables sont conformes",
+        "Le projet est documenté",
+        "Un compte rendu clair et concis est réalisé et les écarts sont justifiés",
+        "La communication écrite et orale est adaptée à l'interlocuteur"
+      ]
+    },
+    {
+      "code": "C1.5",
+      "libelle": "Mettre à disposition des utilisateurs un service informatique",
+      "sous_competences": [
+        "Réaliser les tests d'intégration et d'acceptation d'un service",
+        "Déployer un service",
+        "Accompagner les utilisateurs dans la mise en place d'un service"
+      ],
+      "indicateurs": [
+        "Des tests pertinents d'intégration et d'acceptation sont rédigés et effectués",
+        "Les outils de test sont utilisés de manière appropriée",
+        "Un rapport de test du service est produit",
+        "Un support d'information est disponible",
+        "Les modalités d'accompagnement sont définies",
+        "Le service déployé est opérationnel et donne satisfaction à l'utilisateur"
+      ]
+    },
+    {
+      "code": "C1.6",
+      "libelle": "Organiser son développement professionnel",
+      "sous_competences": [
+        "Mettre en place son environnement d'apprentissage personnel",
+        "Mettre en œuvre des outils et stratégies de veille informationnelle",
+        "Gérer son identité professionnelle",
+        "Développer son projet professionnel"
+      ],
+      "indicateurs": [
+        "Les besoins de formation sont identifiés pour assurer le support ou mettre à disposition un service",
+        "L'environnement d'apprentissage personnel est délimité et expliqué",
+        "La veille est régulière et vise à repérer les techniques et technologies émergentes, à utiliser de manière approfondie des moyens de recherche d'information et à renforcer ses compétences",
+        "L'identité professionnelle est pertinente et visible sur un réseau social professionnel"
+      ]
+    }
+  ]
+}

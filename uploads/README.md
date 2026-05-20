@@ -1,0 +1,3 @@
+Placez ici vos preuves : captures d'écran, PDFs, documents…
+Référez ces fichiers depuis le formulaire d'édition d'une réalisation
+(ex : `uploads/glpi-inventaire.png`).

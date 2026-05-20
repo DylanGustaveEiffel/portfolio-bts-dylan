@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--
+    Portfolio BTS SIO — Version statique (GitHub Pages)
+    ============================================================================
+    Cette page est servie EN STATIQUE par GitHub Pages.
+    - Aucune base de données, aucun serveur back-end : tout est en HTML/CSS/JS.
+    - Les données sont chargées depuis /data/portfolio.json.
+    - L'éditeur enregistre tes modifications dans le navigateur (localStorage)
+      puis te permet d'EXPORTER un nouveau fichier portfolio.json à committer.
+
+    POURQUOI ce choix ?
+    - GitHub Pages n'exécute pas PHP. Pour avoir une URL publique gratuite, on
+      transforme l'affichage en pages statiques.
+    - La version PHP/MVC complète reste dans /php-mvc/ (pour ton oral E5 et
+      pour démontrer ta maîtrise du modèle MVC en local via XAMPP).
+============================================================================ -->
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio BTS SIO — préparation à l'épreuve E5, Bloc 1.">
+    <title>Portfolio BTS SIO — Bloc 1 (E5)</title>
+    <link rel="stylesheet" href="assets/css/portfolio.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<!-- Lien d'évitement : accessibilité clavier / lecteur d'écran -->
+<a href="#contenu-principal" class="lien-evitement" data-testid="skip-link">Aller au contenu principal</a>
+
+<!-- ENTÊTE -->
+<header role="banner" class="entete" data-testid="site-header">
+    <div class="conteneur entete__inner">
+        <a href="#hero" class="entete__marque" data-testid="header-brand" aria-label="Retour en haut">
+            <span class="entete__logo" aria-hidden="true">◆</span>
+            <span>Portfolio BTS SIO</span>
+        </a>
+        <nav class="entete__nav" aria-label="Navigation principale" data-testid="main-nav">
+            <ul>
+                <li><a href="#apropos"      data-testid="nav-apropos">À propos</a></li>
+                <li><a href="#realisations" data-testid="nav-realisations">Réalisations</a></li>
+                <li><a href="#synthese"     data-testid="nav-synthese">Synthèse</a></li>
+                <li><a href="#competences"  data-testid="nav-competences">Compétences</a></li>
+                <li><a href="#veille"       data-testid="nav-veille">Veille</a></li>
+                <li><a href="#contact"      data-testid="nav-contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button id="btnModeEdition" type="button" class="btn btn--primaire"
+                data-testid="toggle-edit-mode" aria-pressed="false">
+            <span aria-hidden="true">✎</span> Mode édition
+        </button>
+    </div>
+</header>
+
+<!-- CONTENU INJECTÉ PAR app.js -->
+<main id="contenu-principal" tabindex="-1" data-testid="main-content">
+    <div id="appRoot"><p class="conteneur" style="padding:3rem 0;text-align:center;color:#64748b;">Chargement du portfolio…</p></div>
+</main>
+
+<!-- PIED -->
+<footer role="contentinfo" class="pied" data-testid="site-footer">
+    <div class="conteneur pied__inner">
+        <p>© <span id="annee"></span> — Portfolio BTS SIO · Préparation oral E5</p>
+        <p class="pied__petit">Fait avec HTML/CSS/JS · Architecture MVC PHP dans <code>/php-mvc/</code></p>
+    </div>
+</footer>
+
+<!-- Panneau d'édition (caché par défaut) -->
+<aside id="panneauEdition" class="panneau" aria-hidden="true" aria-label="Panneau d'édition"
+       data-testid="edit-panel">
+    <div class="panneau__entete">
+        <h2 id="panneauTitre">Éditer</h2>
+        <button type="button" class="panneau__fermer" id="btnFermerPanneau"
+                aria-label="Fermer" data-testid="close-edit-panel">×</button>
+    </div>
+    <div class="panneau__corps" id="panneauCorps"></div>
+</aside>
+<div id="overlayPanneau" class="overlay" hidden></div>
+
+<!-- Barre flottante "actions" pendant le mode édition -->
+<div id="barreEdition" class="barre-edition" hidden data-testid="barre-edition">
+    <button type="button" class="btn btn--secondaire btn--petit" id="btnExporter" data-testid="btn-exporter">
+        ⬇ Exporter mon portfolio.json
+    </button>
+    <button type="button" class="btn btn--secondaire btn--petit" id="btnImporter" data-testid="btn-importer">
+        ⬆ Importer un portfolio.json
+    </button>
+    <button type="button" class="btn btn--danger btn--petit" id="btnReset" data-testid="btn-reset">
+        ↺ Tout réinitialiser
+    </button>
+    <input type="file" id="inputImport" accept=".json" hidden>
+</div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
