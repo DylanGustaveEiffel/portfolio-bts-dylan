@@ -1,170 +1,579 @@
 {
   "profil": {
-    "nom": "",
-    "prenom": "",
+    "nom": "GARNIER",
+    "prenom": "Dylan",
     "numero_candidat": "",
-    "session": "",
-    "option_sio": "",
-    "etablissement": ""
+    "session": "2026",
+    "option_sio": "SLAM",
+    "etablissement": "Lycée Gustave Eiffel",
+    "contact": {
+      "email": "dylan.garnier@example.com",
+      "telephone": "",
+      "linkedin": ""
+    }
   },
+
   "sections": {
     "hero": {
-      "titre": "Votre nom ici",
-      "sous_titre": "Étudiant·e en BTS SIO — option SLAM/SISR",
-      "texte_principal": ""
+      "titre": "Dylan GARNIER",
+      "sous_titre": "Étudiant en BTS SIO — option SLAM",
+      "texte_principal": "Bienvenue sur mon portfolio. Vous trouverez ici l'ensemble de mes réalisations professionnelles, mes compétences, mes stages et mes preuves pour l'épreuve E5.",
+      "image": ""
     },
+
     "apropos": {
       "titre": "À propos",
       "sous_titre": "Mon parcours de professionnalisation",
-      "texte_principal": ""
+      "texte_principal": "Depuis le début de ma formation en BTS SIO option SLAM, j'ai développé des compétences solides en développement applicatif, gestion de données, conception UML, travail en mode projet et mise à disposition de services informatiques. Ce portfolio regroupe l'ensemble de mes réalisations, projets, stages et compétences mobilisées."
     },
+
     "realisations": {
       "titre": "Mes réalisations",
       "sous_titre": "Projets, missions, stages"
     },
+
     "synthese": {
       "titre": "Tableau de synthèse",
       "sous_titre": "Compétences mobilisées par réalisation (officiel E5)"
     },
+
     "attestations": {
       "titre": "Attestations de stage",
       "sous_titre": "Stages de 1ère et 2ème année"
     },
+
     "competences": {
       "titre": "Compétences Bloc 1",
-      "sous_titre": "Référentiel officiel — clique sur une compétence pour voir le détail"
+      "sous_titre": "Référentiel officiel E5",
+      "description": "Les 6 compétences majeures du Bloc 1 que j'ai mobilisées lors de mes réalisations"
     },
+
     "veille": {
       "titre": "Veille technologique",
       "sous_titre": "Sujets suivis, sources fiables, synthèses (C1.6)",
-      "texte_principal": "",
-      "sujets": []
+      "texte_principal": "Ma veille porte principalement sur le développement web moderne, les frameworks JavaScript, l'IA générative et la cybersécurité."
     },
+
     "contact": {
       "titre": "Contact",
       "sous_titre": "Comment me joindre",
-      "texte_principal": ""
+      "texte_principal": "Email : dylan.garnier@example.com"
     }
   },
-  "realisations": [],
-  "attestations": {
-    "annee1": null,
-    "annee2": null
-  },
-  "competences": [
+
+  "competences_bloc1": [
     {
       "code": "C1.1",
-      "libelle": "Gérer le patrimoine informatique",
-      "reformulation": "",
-      "sous_competences": [
-        "Recenser et identifier les ressources numériques",
-        "Exploiter des référentiels, normes et standards adoptés par le prestataire informatique",
-        "Mettre en place et vérifier les niveaux d'habilitation associés à un service",
-        "Vérifier les conditions de la continuité d'un service informatique",
-        "Gérer des sauvegardes",
-        "Vérifier le respect des règles d'utilisation des ressources numériques"
-      ],
+      "titre": "Gérer le patrimoine informatique",
+      "description": "Recenser et identifier les ressources numériques, exploiter des référentiels, normes et standards, mettre en place les habilitations, vérifier la continuité des services, gérer les sauvegardes",
+      "niveau": "initial",
       "indicateurs": [
-        "Le recensement du patrimoine informatique est exhaustif et réalisé au moyen d'un outil de gestion",
-        "Les référentiels, normes et standards sont mobilisés de façon pertinente",
-        "Les droits mis en place correspondent aux habilitations des acteurs",
-        "Les conditions de continuité et de reprise d'un service sont vérifiées et les manquements sont signalés",
-        "Les sauvegardes sont réalisées dans les conditions prévues conformément au plan de sauvegarde",
-        "Les restaurations sont testées et opérationnelles",
-        "Les écarts par rapport aux règles d'utilisation des ressources numériques sont détectés et signalés"
+        "Recenser du patrimoine informatique exhaustif via un outil de gestion",
+        "Mobiliser les référentiels, normes et standards de façon pertinente",
+        "Mettre en place des droits correspondant aux habilitations",
+        "Vérifier les conditions de continuité et de reprise d'un service",
+        "Réaliser les sauvegardes conformément au plan prévu",
+        "Tester et valider les restaurations"
       ]
     },
     {
       "code": "C1.2",
-      "libelle": "Répondre aux incidents et aux demandes d'assistance et d'évolution",
-      "reformulation": "",
-      "sous_competences": [
-        "Collecter, suivre et orienter des demandes",
-        "Traiter des demandes concernant les services réseau et système",
-        "Traiter des demandes concernant les applications"
-      ],
+      "titre": "Répondre aux incidents et aux demandes d'assistance et d'évolution",
+      "description": "Collecter, suivre et orienter les demandes, traiter les demandes concernant les services réseau, système et applicatifs",
+      "niveau": "initial",
       "indicateurs": [
-        "Les demandes d'assistance ont été prises en compte, correctement diagnostiquées et leur traitement correspond aux attentes",
-        "La réponse à une demande d'assistance est conforme à la procédure et adaptée à l'utilisateur",
-        "La méthode de diagnostic de résolution d'un incident est adéquate et efficiente",
-        "Une solution à l'incident est trouvée et mise en œuvre",
-        "Le cycle de résolution des demandes respecte les normes et standards du prestataire informatique",
-        "L'utilisation d'un logiciel de gestion de parc et d'incidents est maîtrisée",
-        "Le compte rendu d'intervention est clair et explicite",
-        "La communication écrite et orale est adaptée à l'interlocuteur"
+        "Prendre en charge les demandes d'assistance correctement diagnostiquées",
+        "Adapter les réponses à la procédure et à l'utilisateur",
+        "Utiliser une méthode de diagnostic adéquate et efficiente",
+        "Trouver et mettre en œuvre une solution à l'incident",
+        "Respecter le cycle de résolution et les normes",
+        "Produire un compte rendu d'intervention clair et explicite"
       ]
     },
     {
       "code": "C1.3",
-      "libelle": "Développer la présence en ligne de l'organisation",
-      "reformulation": "",
-      "sous_competences": [
-        "Participer à la valorisation de l'image de l'organisation sur les médias numériques en tenant compte du cadre juridique et des enjeux économiques",
-        "Référencer les services en ligne de l'organisation et mesurer leur visibilité",
-        "Participer à l'évolution d'un site Web exploitant les données de l'organisation"
-      ],
+      "titre": "Développer la présence en ligne de l'organisation",
+      "description": "Participer à la valorisation de l'image, référencer les services en ligne, mesurer leur visibilité, participer à l'évolution d'un site Web",
+      "niveau": "initial",
       "indicateurs": [
-        "L'image de l'organisation est conforme aux attentes et valorisée",
-        "Les enjeux économiques liés à l'image de l'organisation sont identifiés et les obligations juridiques sont respectées",
-        "Les mentions légales sont accessibles et conformes à la législation",
-        "La visibilité des services en ligne de l'organisation est satisfaisante",
-        "Le site Web a évolué conformément au besoin exprimé"
+        "Valoriser l'image de l'organisation conformément aux attentes",
+        "Identifier les enjeux économiques et respecter les obligations juridiques",
+        "Assurer que les mentions légales sont accessibles et conformes",
+        "Garantir la visibilité satisfaisante des services en ligne",
+        "Faire évoluer le site Web conformément aux besoins"
       ]
     },
     {
       "code": "C1.4",
-      "libelle": "Travailler en mode projet",
-      "reformulation": "",
-      "sous_competences": [
-        "Analyser les objectifs et les modalités d'organisation d'un projet",
-        "Planifier les activités",
-        "Évaluer les indicateurs de suivi d'un projet et analyser les écarts"
-      ],
+      "titre": "Travailler en mode projet",
+      "description": "Analyser les objectifs et modalités d'organisation, planifier les activités, évaluer les indicateurs de suivi et analyser les écarts",
+      "niveau": "initial",
       "indicateurs": [
-        "Les objectifs et les modalités d'organisation du projet sont explicités",
-        "L'analyse des besoins et de l'existant est pertinente",
-        "Les activités personnelles sont planifiées selon une méthodologie donnée et les ressources sont mobilisées de manière efficace et pertinente",
-        "Le découpage en tâches est réaliste",
-        "Les livrables sont conformes",
-        "Le projet est documenté",
-        "Un compte rendu clair et concis est réalisé et les écarts sont justifiés",
-        "La communication écrite et orale est adaptée à l'interlocuteur"
+        "Expliciter les objectifs et modalités d'organisation du projet",
+        "Réaliser une analyse pertinente des besoins et de l'existant",
+        "Planifier les activités avec une méthodologie donnée",
+        "Réaliser un découpage en tâches réaliste",
+        "Livrer des livrables conformes et documentés",
+        "Justifier les écarts et adapter la communication"
       ]
     },
     {
       "code": "C1.5",
-      "libelle": "Mettre à disposition des utilisateurs un service informatique",
-      "reformulation": "",
-      "sous_competences": [
-        "Réaliser les tests d'intégration et d'acceptation d'un service",
-        "Déployer un service",
-        "Accompagner les utilisateurs dans la mise en place d'un service"
-      ],
+      "titre": "Mettre à disposition des utilisateurs un service informatique",
+      "description": "Réaliser les tests d'intégration et d'acceptation, déployer un service, accompagner les utilisateurs dans sa mise en place",
+      "niveau": "initial",
       "indicateurs": [
-        "Des tests pertinents d'intégration et d'acceptation sont rédigés et effectués",
-        "Les outils de test sont utilisés de manière appropriée",
-        "Un rapport de test du service est produit",
-        "Un support d'information est disponible",
-        "Les modalités d'accompagnement sont définies",
-        "Le service déployé est opérationnel et donne satisfaction à l'utilisateur"
+        "Rédiger et effectuer des tests pertinents d'intégration et d'acceptation",
+        "Utiliser les outils de test de manière appropriée",
+        "Produire un rapport de test du service",
+        "Fournir un support d'information disponible",
+        "Définir les modalités d'accompagnement",
+        "Assurer que le service déployé est opérationnel et satisfait l'utilisateur"
       ]
     },
     {
       "code": "C1.6",
-      "libelle": "Organiser son développement professionnel",
-      "reformulation": "",
-      "sous_competences": [
-        "Mettre en place son environnement d'apprentissage personnel",
-        "Mettre en œuvre des outils et stratégies de veille informationnelle",
-        "Gérer son identité professionnelle",
-        "Développer son projet professionnel"
-      ],
+      "titre": "Organiser son développement professionnel",
+      "description": "Mettre en place son environnement d'apprentissage personnel, mettre en œuvre des outils de veille, gérer son identité professionnelle, développer son projet professionnel",
+      "niveau": "initial",
       "indicateurs": [
-        "Les besoins de formation sont identifiés pour assurer le support ou mettre à disposition un service",
-        "L'environnement d'apprentissage personnel est délimité et expliqué",
-        "La veille est régulière et vise à repérer les techniques et technologies émergentes, à utiliser de manière approfondie des moyens de recherche d'information et à renforcer ses compétences",
-        "L'identité professionnelle est pertinente et visible sur un réseau social professionnel"
+        "Identifier les besoins de formation pour supporter ou mettre à disposition un service",
+        "Délimiter et expliquer son environnement d'apprentissage personnel",
+        "Maintenir une veille régulière sur les techniques et technologies émergentes",
+        "Renforcer ses compétences via des moyens de recherche d'information",
+        "Développer une identité professionnelle pertinente et visible"
       ]
     }
-  ]
+  ],
+
+  "realisations": [
+    {
+      "id": "ap21",
+      "titre": "AP 2.1 — Générateur SQL",
+      "periode": {
+        "debut": "2024-09-01",
+        "fin": "2024-12-31"
+      },
+      "type": "AP",
+      "lieu": "Lycée Gustave Eiffel",
+      "competences": ["C1.1", "C1.4", "C1.5", "C1.6"],
+      "description": "Développement d'un générateur SQL permettant de créer automatiquement des requêtes SQL à partir d'un modèle de données. Application console en Python permettant de générer des scripts d'insertion, de sélection et de mise à jour.",
+      "contexte": "Projet d'AP en cours de formation pour apprendre la génération de code et la manipulation de bases de données.",
+      "technologies": ["Python", "SQL", "POO"],
+      "preuves": [
+        {
+          "id": "ap21_code",
+          "titre": "Code source (GitHub)",
+          "type": "code",
+          "url": "",
+          "description": "Dépôt GitHub avec le code source du projet"
+        },
+        {
+          "id": "ap21_demo",
+          "titre": "Démonstration",
+          "type": "video",
+          "url": "",
+          "description": "Vidéo de démonstration du générateur en action"
+        },
+        {
+          "id": "ap21_rapport",
+          "titre": "Rapport de projet",
+          "type": "doc",
+          "url": "",
+          "description": "Rapport détaillé du projet avec explications techniques"
+        }
+      ],
+      "apprentissages": "J'ai appris à automatiser la génération de code SQL, comprendre la structure d'une base de données et manipuler les chaînes de caractères en Python."
+    },
+
+    {
+      "id": "ap23",
+      "titre": "AP 2.3 — Site Statique",
+      "periode": {
+        "debut": "2024-09-01",
+        "fin": "2024-10-31"
+      },
+      "type": "AP",
+      "lieu": "Lycée Gustave Eiffel",
+      "competences": ["C1.3", "C1.4", "C1.6"],
+      "description": "Création d'un site web statique en HTML/CSS pour un portefeuille personnel. Site responsive avec navigation, présentation du portfolio et section à propos.",
+      "contexte": "Projet d'initiation au développement web front-end, mise en pratique des fondamentaux HTML5 et CSS3.",
+      "technologies": ["HTML5", "CSS3", "Responsive Design"],
+      "preuves": [
+        {
+          "id": "ap23_live",
+          "titre": "Site en ligne",
+          "type": "screenshot",
+          "url": "",
+          "description": "Lien vers le site déployé"
+        },
+        {
+          "id": "ap23_code",
+          "titre": "Code source",
+          "type": "code",
+          "url": "",
+          "description": "Code HTML et CSS du site"
+        }
+      ],
+      "apprentissages": "J'ai maîtrisé les fondamentaux du HTML5 et CSS3, compris le concept de responsive design et l'importance de l'accessibilité web."
+    },
+
+    {
+      "id": "ap24",
+      "titre": "AP 2.4 — Suivi des Championnats",
+      "periode": {
+        "debut": "2024-11-01",
+        "fin": "2025-01-31"
+      },
+      "type": "AP",
+      "lieu": "Lycée Gustave Eiffel",
+      "competences": ["C1.1", "C1.4", "C1.5", "C1.6"],
+      "description": "Application de gestion de championnats sportifs permettant de suivre les scores, classements et résultats. Développée en PHP avec base de données MySQL.",
+      "contexte": "Projet d'AP pour apprendre le développement applicatif complet (BD, backend, frontend).",
+      "technologies": ["PHP", "MySQL", "HTML/CSS", "JavaScript"],
+      "preuves": [
+        {
+          "id": "ap24_screenshot",
+          "titre": "Screenshots de l'application",
+          "type": "screenshot",
+          "url": "",
+          "description": "Captures d'écran montrant les fonctionnalités principales"
+        },
+        {
+          "id": "ap24_code",
+          "titre": "Code source",
+          "type": "code",
+          "url": "",
+          "description": "Code PHP et SQL de l'application"
+        }
+      ],
+      "apprentissages": "J'ai compris l'architecture client-serveur, la gestion des bases de données avec MySQL et le développement d'applications web dynamiques."
+    },
+
+    {
+      "id": "ap11",
+      "titre": "AP 1.1 — Réservation des salles M2L",
+      "periode": {
+        "debut": "2024-09-01",
+        "fin": "2025-01-31"
+      },
+      "type": "AP",
+      "lieu": "Lycée Gustave Eiffel",
+      "competences": ["C1.1", "C1.2", "C1.4", "C1.5"],
+      "description": "Développement d'un système de réservation de salles pour la Maison des Ligues. Application web permettant la gestion des réservations, disponibilités et utilisateurs.",
+      "contexte": "Projet long d'AP sur 1 an, en mode projet réel. Travail en équipe, suivi de projet, respect des délais et des spécifications.",
+      "technologies": ["PHP", "MySQL", "HTML5", "CSS3", "JavaScript"],
+      "preuves": [
+        {
+          "id": "ap11_cahier",
+          "titre": "Cahier des charges",
+          "type": "doc",
+          "url": "",
+          "description": "Cahier des charges du projet M2L"
+        },
+        {
+          "id": "ap11_planning",
+          "titre": "Planning de projet",
+          "type": "doc",
+          "url": "",
+          "description": "Planification Gantt du projet"
+        },
+        {
+          "id": "ap11_demo",
+          "titre": "Démonstration",
+          "type": "video",
+          "url": "",
+          "description": "Vidéo de démonstration du système de réservation"
+        }
+      ],
+      "apprentissages": "J'ai appris à travailler en mode projet, respecter un cahier des charges, gérer les délais et communiquer avec les utilisateurs finaux."
+    },
+
+    {
+      "id": "ap31",
+      "titre": "AP 3.1 — Site Dynamique",
+      "periode": {
+        "debut": "2025-09-01",
+        "fin": "2026-01-31"
+      },
+      "type": "AP",
+      "lieu": "Lycée Gustave Eiffel",
+      "competences": ["C1.3", "C1.4", "C1.5"],
+      "description": "Développement d'un site web dynamique avec authentification utilisateur, gestion du contenu et système d'édition. Architecture MVC avec séparation des responsabilités.",
+      "contexte": "Projet avancé de 2ème année mettant en pratique les meilleures pratiques du développement web professionnel.",
+      "technologies": ["PHP 8", "MySQL", "HTML5", "CSS3", "JavaScript", "MVC"],
+      "preuves": [
+        {
+          "id": "ap31_live",
+          "titre": "Site en ligne",
+          "type": "screenshot",
+          "url": "",
+          "description": "Accès au site déployé"
+        },
+        {
+          "id": "ap31_code",
+          "titre": "Code source",
+          "type": "code",
+          "url": "",
+          "description": "Code source du site avec architecture MVC"
+        }
+      ],
+      "apprentissages": "J'ai maîtrisé l'architecture MVC, l'authentification sécurisée, la gestion d'erreurs et les meilleures pratiques de développement web."
+    },
+
+    {
+      "id": "stage1",
+      "titre": "Stage 1ère année — Site e-commerce",
+      "periode": {
+        "debut": "2025-05-20",
+        "fin": "2025-06-20"
+      },
+      "type": "Stage",
+      "organisme": "BTS MCO — Lycée Gustave Eiffel",
+      "competences": ["C1.3", "C1.4", "C1.5"],
+      "description": "Développement d'un site e-commerce pour l'association du BTS MCO. Site permettant la vente en ligne de produits, gestion du panier et des commandes.",
+      "contexte": "Stage en milieu professionnel / scolaire mettant en pratique les compétences en développement web et gestion de projet.",
+      "technologies": ["PHP", "MySQL", "HTML/CSS", "JavaScript"],
+      "preuves": [
+        {
+          "id": "stage1_attestation",
+          "titre": "Attestation de stage",
+          "type": "doc",
+          "url": "",
+          "description": "Attestation officielle du stage fournie par l'organisme"
+        },
+        {
+          "id": "stage1_rapport",
+          "titre": "Rapport de stage",
+          "type": "doc",
+          "url": "",
+          "description": "Rapport détaillé des activités et apprentissages du stage"
+        },
+        {
+          "id": "stage1_demo",
+          "titre": "Démonstration du site",
+          "type": "video",
+          "url": "",
+          "description": "Vidéo montrant le fonctionnement du site e-commerce"
+        }
+      ],
+      "apprentissages": "J'ai compris le fonctionnement d'un e-commerce réel, la gestion des paiements, la sécurité des données et l'importance de l'UX en production."
+    },
+
+    {
+      "id": "stage2",
+      "titre": "Stage 2ème année — Site vitrine",
+      "periode": {
+        "debut": "2026-01-26",
+        "fin": "2026-03-20"
+      },
+      "type": "Stage",
+      "organisme": "Ferme Denis Laroche",
+      "competences": ["C1.3", "C1.4", "C1.5", "C1.6"],
+      "description": "Création d'un site vitrine moderne pour une exploitation agricole. Site responsive, optimisé SEO, avec galerie d'images, formulaire de contact et informations pratiques.",
+      "contexte": "Stage en entreprise réelle avec client final. Gestion directe des demandes, adaptabilité et professionnalisme requis.",
+      "technologies": ["PHP", "MySQL", "HTML5", "CSS3", "JavaScript", "Responsive Design"],
+      "preuves": [
+        {
+          "id": "stage2_attestation",
+          "titre": "Attestation de stage",
+          "type": "doc",
+          "url": "",
+          "description": "Attestation officielle du stage"
+        },
+        {
+          "id": "stage2_live",
+          "titre": "Site en ligne",
+          "type": "screenshot",
+          "url": "https://fermesdenislaroche.fr/",
+          "description": "Accès au site déployé et en production"
+        },
+        {
+          "id": "stage2_rapport",
+          "titre": "Rapport de stage",
+          "type": "doc",
+          "url": "",
+          "description": "Rapport détaillé du stage en entreprise"
+        }
+      ],
+      "apprentissages": "J'ai appris à gérer un vrai client, adapter mes solutions à ses besoins, assurer le suivi en production et maintenir une communication professionnelle."
+    }
+  ],
+
+  "attestations": {
+    "stage1": {
+      "titre": "Stage de développement d'un site web e-commerce",
+      "organisme": "BTS MCO du lycée Gustave Eiffel",
+      "periode_debut": "2025-05-20",
+      "periode_fin": "2025-06-20",
+      "nombre_semaines": 4,
+      "fichier": "",
+      "competences_mobilisees": ["C1.3", "C1.4", "C1.5"]
+    },
+    "stage2": {
+      "titre": "Stage développement web d'un site vitrine",
+      "organisme": "Ferme Denis Laroche",
+      "periode_debut": "2026-01-26",
+      "periode_fin": "2026-03-20",
+      "nombre_semaines": 8,
+      "fichier": "",
+      "competences_mobilisees": ["C1.3", "C1.4", "C1.5", "C1.6"]
+    }
+  },
+
+  "veille_technologique": [
+    {
+      "id": "veille1",
+      "titre": "Évolution des IA génératives",
+      "description": "Impact sur le développement, automatisation du code, productivité et éthique",
+      "domaine": "Intelligence Artificielle",
+      "sources": [
+        {
+          "nom": "OpenAI Blog",
+          "url": "https://openai.com/blog"
+        },
+        {
+          "nom": "Hugging Face",
+          "url": "https://huggingface.co"
+        }
+      ],
+      "apprentissages": "Compréhension des capacités et limitations des LLM, impact sur la profession de développeur",
+      "date_demarrage": "2025-06-01"
+    },
+    {
+      "id": "veille2",
+      "titre": "Frameworks JavaScript modernes",
+      "description": "React, Vue.js, Svelte et autres frameworks front-end",
+      "domaine": "Développement Web",
+      "sources": [
+        {
+          "nom": "JavaScript.info",
+          "url": "https://javascript.info"
+        },
+        {
+          "nom": "MDN Web Docs",
+          "url": "https://developer.mozilla.org"
+        }
+      ],
+      "apprentissages": "Maîtrise des frameworks modernes, différences entre React et Vue.js",
+      "date_demarrage": "2024-09-01"
+    },
+    {
+      "id": "veille3",
+      "titre": "Cybersécurité et RGPD",
+      "description": "Sécurité des données, protection de la vie privée, conformité RGPD",
+      "domaine": "Sécurité Informatique",
+      "sources": [
+        {
+          "nom": "CNIL",
+          "url": "https://www.cnil.fr"
+        },
+        {
+          "nom": "OWASP",
+          "url": "https://owasp.org"
+        }
+      ],
+      "apprentissages": "Compréhension des obligations légales, bonnes pratiques de sécurité",
+      "date_demarrage": "2025-01-01"
+    }
+  ],
+
+  "tableau_synthese": {
+    "note": "Conforme à l'annexe 6 officielle E5 - Session 2026",
+    "nom_candidat": "Dylan GARNIER",
+    "centre_formation": "Lycée Gustave Eiffel",
+    "option": "SLAM",
+    "url_portfolio": "https://dylangustaveeiffel.github.io/portfolio-bts-dylan/",
+    "realisations_formation": [
+      {
+        "titre": "AP 2.1 Générateur SQL",
+        "competences": {
+          "C1.1": true,
+          "C1.2": false,
+          "C1.3": false,
+          "C1.4": true,
+          "C1.5": true,
+          "C1.6": true
+        }
+      },
+      {
+        "titre": "AP 2.3 Site Statique",
+        "competences": {
+          "C1.1": false,
+          "C1.2": false,
+          "C1.3": true,
+          "C1.4": true,
+          "C1.5": true,
+          "C1.6": true
+        }
+      },
+      {
+        "titre": "AP 2.4 Suivi des Championnats",
+        "competences": {
+          "C1.1": false,
+          "C1.2": true,
+          "C1.3": false,
+          "C1.4": true,
+          "C1.5": true,
+          "C1.6": true
+        }
+      },
+      {
+        "titre": "AP 1.1 Réservation des salles M2L",
+        "competences": {
+          "C1.1": true,
+          "C1.2": true,
+          "C1.3": false,
+          "C1.4": true,
+          "C1.5": true,
+          "C1.6": false
+        }
+      },
+      {
+        "titre": "AP 3.1 Site Dynamique",
+        "competences": {
+          "C1.1": true,
+          "C1.2": false,
+          "C1.3": true,
+          "C1.4": true,
+          "C1.5": false,
+          "C1.6": false
+        }
+      }
+    ],
+    "realisations_professionnelles_annee1": [
+      {
+        "titre": "Stage 1ère année (BTS MCO) - Site e-commerce",
+        "competences": {
+          "C1.1": false,
+          "C1.2": false,
+          "C1.3": true,
+          "C1.4": false,
+          "C1.5": true,
+          "C1.6": true
+        }
+      }
+    ],
+    "realisations_professionnelles_annee2": [
+      {
+        "titre": "Stage 2ème année - Ferme de M. Denis La Roche - Site vitrine",
+        "competences": {
+          "C1.1": true,
+          "C1.2": true,
+          "C1.3": true,
+          "C1.4": false,
+          "C1.5": true,
+          "C1.6": true
+        }
+      }
+    ]
+  },
+
+  "meta": {
+    "version": "1.0",
+    "date_creation": "2026-05-20",
+    "date_derniere_modification": "2026-05-20",
+    "url_portfolio": "https://dylangustaveeiffel.github.io/portfolio-bts-dylan/",
+    "notes": "Portfolio JSON conforme à l'épreuve E5 du BTS SIO. Structure conçue pour être facilement intégrable dans un site web avec système de gestion des preuves."
+  }
 }
